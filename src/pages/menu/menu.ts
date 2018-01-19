@@ -1,11 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, Nav, NavController } from 'ionic-angular';
+import {UtilTool} from "../../providers/util";
+import {Page} from "../../models/pages";
 
-interface PageItem {
-  title: string
-  component: any
-}
-type PageList = PageItem[]
 
 @IonicPage()
 @Component({
@@ -18,21 +15,18 @@ export class MenuPage {
 
   rootPage: any = 'ContentPage';
 
-  pages: PageList;
+  pages: Array<Page> = new Array();
 
   constructor(public navCtrl: NavController) {
     // used for an example of ngFor and navigation
-    this.pages = [
-      { title: 'Sign in', component: 'LoginPage' },
-      { title: 'Signup', component: 'SignupPage' }
-    ];
+    this.pages = UtilTool.pages;
   }
 
   ionViewDidLoad() {
     console.log('Hello MenuPage Page');
   }
 
-  openPage(page: PageItem) {
+  openPage(page: Page) {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);

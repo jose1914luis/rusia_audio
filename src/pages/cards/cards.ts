@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController } from 'ionic-angular';
 
+import { Item } from '../../models/item';
+
 @IonicPage()
 @Component({
   selector: 'page-cards',
@@ -41,4 +43,11 @@ export class CardsPage {
     ];
 
   }
+
+  openItem(item: Item) {
+    this.navCtrl.push('CardsDetailPage', {
+      item: item
+    });
+  }
+
 }
