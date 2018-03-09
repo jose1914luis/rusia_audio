@@ -1,18 +1,40 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController } from 'ionic-angular';
-
-import { Item } from '../../models/item';
+import {Component} from '@angular/core';
+import {IonicPage, NavController} from 'ionic-angular';
+import {Services} from '../../providers/services/services';
+import {Item} from '../../models/item';
+import {UtilTool} from "../../providers/util";
+import {LugaresBo} from "../../models/LugaresBo";
 
 @IonicPage()
 @Component({
   selector: 'page-cards',
-  templateUrl: 'cards.html'
+  templateUrl: 'cards.html',
+  providers: [Services, UtilTool]
 })
 export class CardsPage {
-  cardItems: any[];
 
-  constructor(public navCtrl: NavController) {
-    this.cardItems = [
+  cardItems: Array<LugaresBo> = new Array();
+  page: number = 1;
+
+  constructor(public navCtrl: NavController,
+              public util: UtilTool,
+              public services: Services) {
+
+    console.log('entro');
+    this.cargarLugares();
+    /*
+        this.services.login().then(() => {
+          this.services.getLugares().then((lugares) => {
+            debugger;
+          }).catch(error => {
+            this.util.Toast(error.message);
+          });
+        }).catch(error => {
+          this.util.Toast(error.message);
+        });
+    */
+
+    /*this.cardItems = [
       {
         user: {
           avatar: 'assets/img/marty-avatar.png',
@@ -40,7 +62,7 @@ export class CardsPage {
         image: 'assets/img/advance-card-jp.jpg',
         content: 'Your scientists were so preoccupied with whether or not they could, that they didn\'t stop to think if they should.'
       }
-    ];
+    ];*/
 
   }
 
@@ -50,4 +72,23 @@ export class CardsPage {
     });
   }
 
+
+  // Retorna los producto por pagina
+  getDataScroll(infiniteScroll): Promise<any> {
+    console.log('Begin async operation');
+    this.page = this.page + 1;
+    return new Promise((resolve) => {
+      this.cargarLugares().then(() => {
+        infiniteScroll.complete();
+        resolve();
+      });
+    });
+  }
+
+  async cargarLugares() {
+    await new LugaresBo().get(this.page).then(data => {
+      data.map(lugar => this.cardItems.push(new LugaresBo(lugar)));
+    }).catch(error => {
+    });
+  }
 }

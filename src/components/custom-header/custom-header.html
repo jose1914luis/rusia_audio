@@ -1,0 +1,16 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{title | translate }}</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="toggleSearchEvent()">
+        <ion-icon name="search"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+  <ion-toolbar *ngIf="toggleSearch === true">
+    <ion-searchbar (input)="getItems($event)"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>

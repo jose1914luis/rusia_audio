@@ -3,7 +3,6 @@ import { TranslateModule } from '@ngx-translate/core';
 import { IonicPageModule } from 'ionic-angular';
 
 import {AgmCoreModule} from '@agm/core';
-
 import { MapaPage } from './mapa';
 
 @NgModule({

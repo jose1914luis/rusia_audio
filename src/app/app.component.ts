@@ -19,6 +19,10 @@ import {UtilTool} from "../providers/util";
 
       <ion-content>
         <ion-list>
+          <button menuClose ion-item (click)="openPage({title: 'Home', component: 'ContentPage', icon: ''})">
+            <ion-icon name="home"></ion-icon>
+            Home
+          </button>
           <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
             <ion-icon name="{{p.icon}}"></ion-icon>
             {{p.title}}

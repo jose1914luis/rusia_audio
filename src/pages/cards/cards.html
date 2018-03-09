@@ -1,32 +1,28 @@
 <ion-header>
-
   <ion-navbar>
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>{{ 'CARDS_TITLE' | translate }}</ion-title>
   </ion-navbar>
-
 </ion-header>
 
 
 <ion-content>
-
   <ion-card *ngFor="let item of cardItems">
-
     <div (click)="openItem(item)">
       <ion-item>
         <ion-avatar item-start>
-          <img [src]="item.user.avatar">
+          <!--<img [src]="item.user.avatar">-->
         </ion-avatar>
-        <h2>{{item.user.name}}</h2>
-        <p>{{item.date}}</p>
+        <h2>{{item.name}}</h2>
+        <p>{{item.direccion}}</p>
       </ion-item>
 
-      <img [src]="item.image">
+      <!--<img [src]="item.image">-->
 
       <ion-card-content>
-        <p>{{item.content}}</p>
+        <p>{{item.descripcion}}</p>
       </ion-card-content>
     </div>
 
@@ -50,4 +46,12 @@
       </ion-col>
     </ion-row>
   </ion-card>
+
+
+  <ion-infinite-scroll (ionInfinite)="getDataScroll($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Loading more data...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

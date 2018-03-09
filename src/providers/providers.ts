@@ -1,11 +1,13 @@
 import {Api} from './api/api';
-import {Items} from '../mocks/providers/items';
+import {Services} from './services/services';
 import {Settings} from './settings/settings';
 import {UtilTool} from './util';
+import {AudioguiaSQLiteHelper} from '../database/AudioguiaSQLiteHelper';
 
 export {
   Api,
-  Items,
+  Services,
   Settings,
-  UtilTool
+  UtilTool,
+  AudioguiaSQLiteHelper
 };

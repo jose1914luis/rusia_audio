@@ -4,18 +4,18 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>{{ item.name }}</ion-title>
+    <ion-title>{{ item }}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content>
-  <div class="item-profile" text-center #profilePic [style.background-image]="'url(' + item.profilePic + ')'">
+  <div class="item-profile" text-center #profilePic [style.background-image]="'url(' + item + ')'">
   </div>
 
   <div class="item-detail" padding>
-    <h2>{{item.name}}</h2>
-    <p>{{item.about}}</p>
+    <h2>{{item}}</h2>
+    <p>{{item}}</p>
   </div>
 </ion-content>

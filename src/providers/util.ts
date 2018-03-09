@@ -1,6 +1,8 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {ActionSheetController, AlertController, LoadingController, Platform, ToastController} from 'ionic-angular';
 import {Page} from "../models/pages";
+import {LugaresBo} from "../models/LugaresBo";
+import {APP_CONFIG} from "../../constants";
 
 
 @Injectable()
@@ -8,25 +10,26 @@ export class UtilTool {
 
 
   public static pages: Array<Page> = [
-    {title: 'Mapa', component: 'MapaPage', icon: 'map'},
-    {title: 'Rutas', component: 'CardsPage', icon: 'compass'},
-    {title: 'Lugares de interes', component: 'CardsPage', icon: 'locate'},
-    {title: 'Donde comer', component: 'CardsPage', icon: 'pizza'},
-    {title: 'Donde dormir', component: 'CardsPage', icon: 'alarm'},
-    {title: 'Otros lugares', component: 'CardsPage', icon: 'locate'},
-    {title: 'Mis favoritos', component: 'CardsPage', icon: 'star'},
-    {title: 'Informacion util', component: 'CardsPage', icon: 'information-circle'},
-    {title: 'Curiosidades', component: 'CardsPage', icon: 'search'},
-    {title: 'Historia del metro', component: 'CardsPage', icon: 'stopwatch'},
-    {title: 'Esquema del metro', component: 'CardsPage', icon: 'git-network'},
-    {title: 'Estaciones del metro', component: 'CardsPage', icon: 'train'},
-    {title: 'Curiosidades del metro', component: 'CardsPage', icon: 'bus'},
-    {title: 'Configuracion', component: 'SettingsPage', icon: 'settings'},
-    {title: 'Otras ciudades', component: 'CardsPage', icon: 'md-globe'}
+    {title: 'Mapa', component: 'MapaPage', icon: 'icon_map.png'},
+    {title: 'Rutas', component: 'CardsPage', icon: 'icon_route.png'},
+    {title: 'Lugares de interes', component: 'CardsPage', icon: 'icon_place.png'},
+    {title: 'Donde comer', component: 'CardsPage', icon: 'icon_foot.png'},
+    {title: 'Donde dormir', component: 'CardsPage', icon: 'icon_sleep.png'},
+    {title: 'Otros lugares', component: 'CardsPage', icon: 'icon_place.png'},
+    {title: 'Mis favoritos', component: 'CardsPage', icon: 'icon_star.png'},
+    {title: 'Información util', component: 'CardsPage', icon: 'icon_info.png'},
+    {title: 'Curiosidades', component: 'CardsPage', icon: 'ic_curiosidad.png'},
+    {title: 'Historia del metro', component: 'CardsPage', icon: 'ic_historia.png'},
+    {title: 'Esquema del metro', component: 'CardsPage', icon: 'ic_esquema.png'},
+    {title: 'Estaciones del metro', component: 'CardsPage', icon: 'ic_estaciones.png'},
+    {title: 'Curiosidades del metro', component: 'CardsPage', icon: 'ic_curiosidad_metro.png'},
+    {title: 'Configuración', component: 'SettingsPage', icon: 'icon_settings.png'},
+    {title: 'Otras ciudades', component: 'CardsPage', icon: 'icon_city.png'}
   ];
 
-
   public loading: any;
+  public static imagenes: Array<any> = new Array();
+  public static lugares: Array<LugaresBo> = new Array();
 
 
   constructor(public loadingCtrl: LoadingController,
@@ -38,6 +41,14 @@ export class UtilTool {
 
   }
 
+
+  public getListIds(map): string {
+    let ids: string = "";
+    for (let id of map) {
+      ids += id + ',';
+    }
+    return ids;
+  }
 
   public getRandom(): string {
     return Math.random().toString(36).substr(2, 8).toString().toUpperCase();
@@ -75,7 +86,7 @@ export class UtilTool {
     alert.present();
   }
 
-  public showToast(text) {
+  public Toast(text) {
     let toast = this.toastCtrl.create({
       message: text,
       duration: 3000,
@@ -93,30 +104,30 @@ export class UtilTool {
   }
 
 
-  showConfirm(message: string, onsuccess: any, oncancel: any) {
-    let alert = this.alertCtrl.create({
-      title: 'Audio Guia',
-      message: message,
-      buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-          handler: () => {
-            console.log('Cancel clicked');
-            // alert.dismiss();
-            oncancel('0');
-          }
-        },
-        {
-          text: 'Confirmar',
-          handler: () => {
-            console.log('Buy clicked');
-            onsuccess('1');
-          }
-        }
-      ]
-    });
-    alert.present();
+  public Confirm(message = 'Please confirm to continue.', confirmText = 'Confirm', cancelText = 'Cancel'): Promise<any> {
+    return new Promise((resolve, reject) => {
+        let alert = this.alertCtrl.create({
+          title: APP_CONFIG.APP_NAME,
+          message: message,
+          buttons: [
+            {
+              text: cancelText || 'Cancel',
+              role: 'cancel',
+              handler: () => {
+                reject(new Error(cancelText));
+              }
+            },
+            {
+              text: confirmText || 'Confirm',
+              handler: () => {
+                resolve(confirmText);
+              }
+            }
+          ]
+        });
+        alert.present();
+      }
+    )
   }
 
 }

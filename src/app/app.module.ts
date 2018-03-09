@@ -2,6 +2,8 @@ import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {ErrorHandler, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {Camera} from '@ionic-native/camera';
+import { Media } from '@ionic-native/media';
+import { MusicControls } from '@ionic-native/music-controls';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {StatusBar} from '@ionic-native/status-bar';
 import {IonicStorageModule, Storage} from '@ionic/storage';
@@ -11,11 +13,26 @@ import {IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
 
 import {AgmCoreModule} from '@agm/core';
 
-import {Items} from '../mocks/providers/items';
 import {Settings} from '../providers/providers';
 import {Api} from '../providers/providers';
 import {MyApp} from './app.component';
-
+import {Services} from '../providers/services/services';
+import {UtilTool} from "../providers/util";
+import {AudioguiaSQLiteHelper} from "../database/AudioguiaSQLiteHelper";
+import {SQLitePorter} from "@ionic-native/sqlite-porter";
+import {SQLite} from "@ionic-native/sqlite";
+import {
+  FavoritosEntry,
+  CitysEntry,
+  EstacionesEntry,
+  GeneralEntry,
+  ImagenesEntry,
+  LogEnty,
+  LogFileEnty,
+  LugaresEntry,
+  RutasEntry,
+  TipoEntry
+} from "../database/AudioguiaData";
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
 export function createTranslateLoader(http: HttpClient) {
@@ -64,10 +81,26 @@ export function provideSettings(storage: Storage) {
   ],
   providers: [
     Api,
-    Items,
     Camera,
+    Media,
+    MusicControls,
     SplashScreen,
     StatusBar,
+    Services,
+    UtilTool,
+    SQLite,
+    SQLitePorter,
+    AudioguiaSQLiteHelper,
+    FavoritosEntry,
+    CitysEntry,
+    EstacionesEntry,
+    GeneralEntry,
+    ImagenesEntry,
+    LogEnty,
+    LogFileEnty,
+    LugaresEntry,
+    RutasEntry,
+    TipoEntry,
     {provide: Settings, useFactory: provideSettings, deps: [Storage]},
     // Keep this to enable Ionic's runtime error handling during development
     {provide: ErrorHandler, useClass: IonicErrorHandler}

@@ -1,22 +1,29 @@
-<ion-header>
-  <ion-navbar>
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>
-      Content
-    </ion-title>
-  </ion-navbar>
-</ion-header>
+<custom-header title="APP_NAME"></custom-header>
 
+<ion-content class="grid-full" padding>
+  <ion-row>
+    <ion-col *ngFor="let item of pages let i = index">
+      <ion-card>
+        <img src="assets/img/menu/{{item.icon}}" (click)="openPage(item)"/>
+        <ion-card-content>
+          <ion-card-title>
+            {{item.title}}
+          </ion-card-title>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+</ion-content>
+
+<!--
 <ion-content padding>
   <ion-grid>
     <ion-row *ngFor="let trio of getElemento(); let i = index">
       <ion-col width-50 *ngFor="let item of trio; let x = index" (click)="openPage(item)" text-center>
-        <!--<img src="assets/imgs/menu/{{item.icon}}" class="img_menu" *ngIf="item.icon != ''"/>-->
+        &lt;!&ndash;<img src="assets/imgs/menu/{{item.icon}}" class="img_menu" *ngIf="item.icon != ''"/>&ndash;&gt;
         <div class="item-panel">
           <div class="item-body">
-            <ion-icon name="{{item.icon}}"></ion-icon>
+            <img src="../../assets/img/menu/{{item.icon}}" />
           </div>
           <div class="item-footer">
             <b>{{item.title}}</b>
@@ -25,4 +32,4 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-</ion-content>
+</ion-content>-->
