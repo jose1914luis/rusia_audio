@@ -7,6 +7,7 @@ import {Config, Nav, Platform} from 'ionic-angular';
 import {FirstRunPage} from '../pages/pages';
 import {Settings} from '../providers/providers';
 import {UtilTool} from "../providers/util";
+import {AudioguiaSQLiteHelper} from "../database/AudioguiaSQLiteHelper";
 
 @Component({
   template: `
@@ -40,7 +41,13 @@ export class MyApp {
 
   pages: any[] = UtilTool.pages;
 
-  constructor(private translate: TranslateService, platform: Platform, settings: Settings, private config: Config, private statusBar: StatusBar, private splashScreen: SplashScreen) {
+  constructor(private translate: TranslateService,
+              private platform: Platform,
+              private settings: Settings,
+              private config: Config,
+              private statusBar: StatusBar,
+              private audioguiaSQLiteHelper: AudioguiaSQLiteHelper,
+              private splashScreen: SplashScreen) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -48,6 +55,7 @@ export class MyApp {
       this.splashScreen.hide();
     });
     this.initTranslate();
+    audioguiaSQLiteHelper.initDb();
   }
 
   initTranslate() {
