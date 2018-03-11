@@ -5,7 +5,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {Config, Nav, Platform} from 'ionic-angular';
 
 import {FirstRunPage} from '../pages/pages';
-import {Settings} from '../providers/providers';
+import {Settings, Services} from '../providers/providers';
 import {UtilTool} from "../providers/util";
 import {AudioguiaSQLiteHelper} from "../database/AudioguiaSQLiteHelper";
 
@@ -46,6 +46,7 @@ export class MyApp {
               private settings: Settings,
               private config: Config,
               private statusBar: StatusBar,
+              private services: Services,
               private audioguiaSQLiteHelper: AudioguiaSQLiteHelper,
               private splashScreen: SplashScreen) {
     platform.ready().then(() => {
@@ -55,7 +56,24 @@ export class MyApp {
       this.splashScreen.hide();
     });
     this.initTranslate();
-    audioguiaSQLiteHelper.initDb();
+    this.initSync();
+  }
+
+  initSync() {
+    this.audioguiaSQLiteHelper.initDb().then(() => {
+      this.services.login().then(
+        () => {
+          // this.services.getLugares().then(()=>{}).catch(()=>{});
+        }
+      ).catch(ex => {
+        console.log('initSync login');
+        console.log(ex);
+      });
+
+    }).catch(ex => {
+      console.log('initSync initDb');
+      console.log(ex);
+    });
   }
 
   initTranslate() {

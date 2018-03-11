@@ -1,8 +1,10 @@
 export const APP_CONFIG = {
   APP_NAME: "Audio Guia Rusia",
-  SERVER_URL: "http://moscutourgratis.com:8069/",
+  PROXY: "/api/",
+  SERVER_URL: "http://moscutourgratis.com:8069",
+  SERVER_PORT: "8069",
   DATABASE_NAME: "Audio_Guia_Rusia",
-  SQLITE_DB: "Audio_Guia_Rusia_01.db",
+  SQLITE_DB: "Audio_Guia_Rusia_05.db",
   URL_PLAY_STORE: "https://play.google.com/store/apps/developer?id:Tour%20Gratis%20Rusia&hl:es",
   EMAIL: "app_admin",
   PASS_EMAIL: "p{R2H[",

@@ -22,7 +22,7 @@ export class AudioguiaSQLiteHelper {
   public storage: SQLite;
   public static sqlitePorter: SQLitePorter = null;
   public static db: SQLiteObject = null;
-  public static options = {name: APP_CONFIG.SQLITE_DB || 'AudioGuiaRusia01.db', location: 'default'};
+  public static options = {name: APP_CONFIG.SQLITE_DB || 'AudioGuiaRusia.db', location: 'default'};
 
   public constructor(public sqlite: SQLite,
                      public favoritosEntry: FavoritosEntry,
@@ -41,28 +41,32 @@ export class AudioguiaSQLiteHelper {
 
   }
 
-  initDb() {
-    this.sqlite.create(AudioguiaSQLiteHelper.options).then((db: SQLiteObject) => {
-
-      if (AudioguiaSQLiteHelper.isOpen == false) {
-        AudioguiaSQLiteHelper.db = db;
-        console.log('Create DataBase');
-        db.executeSql(this.favoritosEntry.CREATE, {}).then(() => console.log('Executed SQL FavoritosEntry CREATE')).catch(e => console.log(e));
-        db.executeSql(this.rutasEntry.CREATE, {}).then(() => console.log('Executed SQL RutasEntry CREATE')).catch(e => console.log(e));
-        db.executeSql(this.lugaresEntry.CREATE, {}).then(() => console.log('Executed SQL LugaresEntry CREATE')).catch(e => console.log(e));
-        db.executeSql(this.generalEntry.CREATE, {}).then(() => console.log('Executed SQL GeneralEntry CREATE')).catch(e => console.log(e));
-        db.executeSql(this.estacionesEntry.CREATE, {}).then(() => console.log('Executed SQL EstacionesEntry CREATE')).catch(e => console.log(e));
-        db.executeSql(this.logEnty.CREATE, {}).then(() => console.log('Executed SQL LogEnty CREATE')).catch(e => console.log(e));
-        db.executeSql(this.imagenesEntry.CREATE, {}).then(() => console.log('Executed SQL ImagenesEntry CREATE')).catch(e => console.log(e));
-        db.executeSql(this.tipoEntry.CREATE, {}).then(() => console.log('Executed SQL TipoEntry CREATE')).catch(e => console.log(e));
-        db.executeSql(this.citysEntry.CREATE, {}).then(() => console.log('Executed SQL CitysEntry CREATE')).catch(e => console.log(e));
-        db.executeSql(this.logFileEnty.CREATE, {}).then(() => console.log('Executed SQL LogFileEnty CREATE')).catch(e => console.log(e));
-        AudioguiaSQLiteHelper.isOpen = true;
-      }
-    })
-      .catch(e => {
-        console.log('Create DataBase ERROR');
-        console.log(e);
-      });
+  async initDb(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.sqlite.create(AudioguiaSQLiteHelper.options).then(async (db: SQLiteObject) => {
+        if (AudioguiaSQLiteHelper.isOpen == false) {
+          AudioguiaSQLiteHelper.db = db;
+          console.log('Create DataBase');
+          await db.executeSql(this.favoritosEntry.CREATE, {}).then(() => console.log('Executed SQL FavoritosEntry CREATE')).catch(e => console.log(e));
+          await db.executeSql(this.rutasEntry.CREATE, {}).then(() => console.log('Executed SQL RutasEntry CREATE')).catch(e => console.log(e));
+          await db.executeSql(this.lugaresEntry.CREATE, {}).then(() => console.log('Executed SQL LugaresEntry CREATE')).catch(e => console.log(e));
+          await db.executeSql(this.generalEntry.CREATE, {}).then(() => console.log('Executed SQL GeneralEntry CREATE')).catch(e => console.log(e));
+          await db.executeSql(this.estacionesEntry.CREATE, {}).then(() => console.log('Executed SQL EstacionesEntry CREATE')).catch(e => console.log(e));
+          await db.executeSql(this.logEnty.CREATE, {}).then(() => console.log('Executed SQL LogEnty CREATE')).catch(e => console.log(e));
+          await db.executeSql(this.imagenesEntry.CREATE, {}).then(() => console.log('Executed SQL ImagenesEntry CREATE')).catch(e => console.log(e));
+          await db.executeSql(this.tipoEntry.CREATE, {}).then(() => console.log('Executed SQL TipoEntry CREATE')).catch(e => console.log(e));
+          await db.executeSql(this.citysEntry.CREATE, {}).then(() => console.log('Executed SQL CitysEntry CREATE')).catch(e => console.log(e));
+          await db.executeSql(this.logFileEnty.CREATE, {}).then(() => console.log('Executed SQL LogFileEnty CREATE')).catch(e => console.log(e));
+          AudioguiaSQLiteHelper.isOpen = true;
+        }
+        resolve(true);
+      })
+        .catch(e => {
+          console.log('Create DataBase ERROR');
+          console.log(e);
+          reject(e);
+        });
+    });
   }
+
 }

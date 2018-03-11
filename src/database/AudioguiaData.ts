@@ -127,6 +127,17 @@ class LugaresEntry {
 
   public DELETE: string =
     "DROP TABLE IF EXISTS " + this.TABLE_NAME;
+
+  public INSERT = "INSERT INTO " + this.TABLE_NAME + " (" + this.ID_ODOO + ") VALUES (?) ";
+
+  // public UPDATE = "UPDATE " + this.TABLE_NAME + " SET " + this.IMAGE + "= ? WHERE " + this.ID_ODOO + " = ? ";
+
+  public EXIST = "SELECT * FROM " + this.TABLE_NAME + " WHERE " + this.ID_ODOO + " = ? ";
+
+  public SELECT_ONE = "SELECT * FROM " + this.TABLE_NAME + " WHERE " + this.ID_ODOO + " = ? LIMIT 1 ";
+
+  public SELECT_ALL = "SELECT * FROM " + this.TABLE_NAME;
+
 }
 
 @Injectable()
@@ -234,6 +245,18 @@ class ImagenesEntry {
 
   public DELETE =
     "DROP TABLE IF EXISTS " + this.TABLE_NAME;
+
+  public INSERT = "INSERT INTO " + this.TABLE_NAME + " (" + this.ID_ODOO + ") VALUES (?)";
+
+  public UPDATE = "UPDATE " + this.TABLE_NAME + " SET " + this.IMAGE + "= ? WHERE " + this.ID_ODOO + " = ? ";
+
+  public EXIST = "SELECT * FROM  " + this.TABLE_NAME + " WHERE " + this.ID_ODOO + " = ? LIMIT 1 ";
+
+  public SELECT_ONE = "SELECT * FROM  " + this.TABLE_NAME + " WHERE " + this.ID_ODOO + " = ? LIMIT 1 ";
+
+  // public SELECT_IMAGE = "SELECT * FROM " + this.TABLE_NAME + " WHERE " + this.ID_ODOO + " = ? LIMIT 1 ";
+  public SELECT_IMAGE = "SELECT * FROM " + this.TABLE_NAME + " WHERE " + this.ID_ODOO + " = ? AND " + this.IMAGE + " IS NOT NULL LIMIT 1 ";
+
 }
 
 @Injectable()

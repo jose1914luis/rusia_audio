@@ -1,8 +1,8 @@
 import {AudioguiaSQLiteHelper} from "../database/AudioguiaSQLiteHelper";
 import {LugaresEntry} from "../database/AudioguiaData";
-import {SQLitePorter} from "@ionic-native/sqlite-porter";
 import {ILugar} from "../interface/ILugar";
 import {APP_CONFIG} from "../../constants";
+import {ImagenesBo} from "./ImagenesBo";
 
 export class LugaresBo {
   constructor(obj = null) {
@@ -12,7 +12,7 @@ export class LugaresBo {
     this._id = obj.id;
     this._id_odoo = obj.id_odoo;
     this._name = obj.name;
-    this._descripcion = obj.descripcion;
+    this._descripcion = obj.description;
     this._audio_name = obj.audio_name;
     this._score = obj.score;
     this._direccion = obj.direccion;
@@ -33,6 +33,7 @@ export class LugaresBo {
     this._write_date = obj.write_date;
     this._url = obj.url;
     this._icon_marker = obj.icon_marker;
+    this._images_bo = new Array();
   }
 
   private _id: number;
@@ -56,23 +57,23 @@ export class LugaresBo {
     this._id_odoo = value;
   }
 
-  private _name: string;
+  private _name: any;
 
-  get name(): string {
+  get name(): any {
     return this._name;
   }
 
-  set name(value: string) {
+  set name(value: any) {
     this._name = value;
   }
 
-  private _descripcion: string;
+  private _descripcion: any;
 
-  get descripcion(): string {
+  get descripcion(): any {
     return this._descripcion;
   }
 
-  set descripcion(value: string) {
+  set descripcion(value: any) {
     this._descripcion = value;
   }
 
@@ -276,13 +277,22 @@ export class LugaresBo {
     this._icon_marker = value;
   }
 
-  public static saveAllJson(Lugares: Array<ILugar>) {
-    debugger;
-    console.log(Lugares);
+  private _images_bo: Array<ImagenesBo>;
+
+  get images_bo(): Array<ImagenesBo> {
+    return this._images_bo;
+  }
+
+  set images_bo(value: Array<ImagenesBo>) {
+    this._images_bo = value;
+  }
+
+  public static saveAllJson(newLugares: Array<ILugar>, updateLugares: Array<ILugar>) {
+    console.log(newLugares);
+    console.log(updateLugares);
     return new Promise((resolve, reject) => {
       const lugaresEntry: LugaresEntry = new LugaresEntry();
       const table_name: string = lugaresEntry.TABLE_NAME;
-      debugger;
       var json = {
         "structure": {
           "tables": {
@@ -297,13 +307,13 @@ export class LugaresBo {
             "[" + lugaresEntry.INTERES + "], [" + lugaresEntry.ES_GRATIS + "]," +
             "[" + lugaresEntry.IMAGENES + "], [" + lugaresEntry.RUTAS_IDS + "]," +
             "[" + lugaresEntry.LUGARES_IDS + "], [" + lugaresEntry.URL + "]," +
-            "[" + lugaresEntry.MARKER_ICON + "] " +
+            "[" + lugaresEntry.MARKER_ICON + "], [" + lugaresEntry.AUDIO_NAME + "]" +
             ")"
           }
         },
         "data": {
           "inserts": {
-            "lugares": Lugares
+            "lugares": newLugares
           }
         }
       };
@@ -347,7 +357,7 @@ export class LugaresBo {
   }
 
   public static exist(id: number): Promise<boolean> {
-    const query: string = "select id_odoo from lugares where id_odoo = ? ";
+    const query: string = "SELECT id_odoo FROM lugares WHERE id_odoo = ? ";
     return new Promise((resolve, reject) => {
       AudioguiaSQLiteHelper.db.executeSql(query, [id])
         .then((data) => {

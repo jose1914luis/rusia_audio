@@ -11,20 +11,20 @@ export class UtilTool {
 
   public static pages: Array<Page> = [
     {title: 'Mapa', component: 'MapaPage', icon: 'icon_map.png'},
-    {title: 'Rutas', component: 'CardsPage', icon: 'icon_route.png'},
-    {title: 'Lugares de interes', component: 'CardsPage', icon: 'icon_place.png'},
-    {title: 'Donde comer', component: 'CardsPage', icon: 'icon_foot.png'},
-    {title: 'Donde dormir', component: 'CardsPage', icon: 'icon_sleep.png'},
-    {title: 'Otros lugares', component: 'CardsPage', icon: 'icon_place.png'},
-    {title: 'Mis favoritos', component: 'CardsPage', icon: 'icon_star.png'},
-    {title: 'Información util', component: 'CardsPage', icon: 'icon_info.png'},
-    {title: 'Curiosidades', component: 'CardsPage', icon: 'ic_curiosidad.png'},
-    {title: 'Historia del metro', component: 'CardsPage', icon: 'ic_historia.png'},
-    {title: 'Esquema del metro', component: 'CardsPage', icon: 'ic_esquema.png'},
-    {title: 'Estaciones del metro', component: 'CardsPage', icon: 'ic_estaciones.png'},
-    {title: 'Curiosidades del metro', component: 'CardsPage', icon: 'ic_curiosidad_metro.png'},
+    {title: 'Rutas', component: 'LugaresPage', icon: 'icon_route.png'},
+    {title: 'Lugares de interes', component: 'LugaresPage', icon: 'icon_place.png'},
+    {title: 'Donde comer', component: 'LugaresPage', icon: 'icon_foot.png'},
+    {title: 'Donde dormir', component: 'LugaresPage', icon: 'icon_sleep.png'},
+    {title: 'Otros lugares', component: 'LugaresPage', icon: 'icon_place.png'},
+    {title: 'Mis favoritos', component: 'LugaresPage', icon: 'icon_star.png'},
+    {title: 'Información util', component: 'LugaresPage', icon: 'icon_info.png'},
+    {title: 'Curiosidades', component: 'LugaresPage', icon: 'ic_curiosidad.png'},
+    {title: 'Historia del metro', component: 'LugaresPage', icon: 'ic_historia.png'},
+    {title: 'Esquema del metro', component: 'LugaresPage', icon: 'ic_esquema.png'},
+    {title: 'Estaciones del metro', component: 'LugaresPage', icon: 'ic_estaciones.png'},
+    {title: 'Curiosidades del metro', component: 'LugaresPage', icon: 'ic_curiosidad_metro.png'},
     {title: 'Configuración', component: 'SettingsPage', icon: 'icon_settings.png'},
-    {title: 'Otras ciudades', component: 'CardsPage', icon: 'icon_city.png'}
+    {title: 'Otras ciudades', component: 'LugaresPage', icon: 'icon_city.png'}
   ];
 
   public loading: any;

@@ -9,14 +9,13 @@
 
 
 <ion-content>
-  <ion-card *ngFor="let item of cardItems">
+  <ion-card *ngFor="let item of lugaresItems">
     <div (click)="openItem(item)">
       <ion-item>
-        <ion-avatar item-start>
-          <!--<img [src]="item.user.avatar">-->
-        </ion-avatar>
+        <img item-start [src]="domSanitizationService.bypassSecurityTrustUrl(item.images_bo[0].image)"
+             *ngIf="item.images_bo &&  item.images_bo.length > 0">
         <h2>{{item.name}}</h2>
-        <p>{{item.direccion}}</p>
+        <p>{{item.descripcion}}</p>
       </ion-item>
 
       <!--<img [src]="item.image">-->

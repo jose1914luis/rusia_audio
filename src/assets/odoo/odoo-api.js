@@ -1,4 +1,4 @@
-function OdooApi(host, db) {
+function OdooApi(host, proxy, db) {
 
   if (!host.match('\/$')) {
     host = host + '/';
@@ -6,6 +6,7 @@ function OdooApi(host, db) {
 
   this.odoo_host = host;
   this.odoo_db = db;
+  this.odoo_proxy = proxy;
   this.odoo_uid = false;
   this.odoo_user = false;
   this.odoo_password = false;
@@ -22,7 +23,7 @@ function OdooApi(host, db) {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
           'Access-Control-Allow-Headers': '*'
         },
-        url: odoo_api.odoo_host + 'xmlrpc/common',
+        url: odoo_api.odoo_proxy + 'xmlrpc/common',
         methodName: 'login',
         params: [odoo_api.odoo_db, user, password],
         timeout: 7000000,
@@ -59,7 +60,7 @@ function OdooApi(host, db) {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
           'Access-Control-Allow-Headers': '*'
         },
-        url: odoo_api.odoo_host + 'xmlrpc/object',
+        url: odoo_api.odoo_proxy + 'xmlrpc/object',
         methodName: 'execute',
         params: [odoo_api.odoo_db, odoo_api.odoo_uid, odoo_api.odoo_password,
           model, 'search_read', domain, fields, offset, limit, order],
@@ -95,7 +96,7 @@ function OdooApi(host, db) {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
           'Access-Control-Allow-Headers': '*'
         },
-        url: odoo_api.odoo_host + 'xmlrpc/object',
+        url: odoo_api.odoo_proxy + 'xmlrpc/object',
         methodName: 'execute',
         params: [odoo_api.odoo_db, odoo_api.odoo_uid, odoo_api.odoo_password,
           model, 'search', domain],
@@ -127,7 +128,7 @@ function OdooApi(host, db) {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
           'Access-Control-Allow-Headers': '*'
         },
-        url: odoo_api.odoo_host + 'xmlrpc/object',
+        url: odoo_api.odoo_proxy + 'xmlrpc/object',
         methodName: 'execute',
         params: [odoo_api.odoo_db, odoo_api.odoo_uid, odoo_api.odoo_password,
           model, 'read', ids, fields],
@@ -159,7 +160,7 @@ function OdooApi(host, db) {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
           'Access-Control-Allow-Headers': '*'
         },
-        url: odoo_api.odoo_host + 'xmlrpc/object',
+        url: odoo_api.odoo_proxy + 'xmlrpc/object',
         methodName: 'execute',
         params: [odoo_api.odoo_db, odoo_api.odoo_uid, odoo_api.odoo_password,
           model, 'write', id, data],
@@ -194,7 +195,7 @@ function OdooApi(host, db) {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
           'Access-Control-Allow-Headers': '*'
         },
-        url: odoo_api.odoo_host + 'xmlrpc/object',
+        url: odoo_api.odoo_proxy + 'xmlrpc/object',
         methodName: 'execute',
         params: [odoo_api.odoo_db, odoo_api.odoo_uid, odoo_api.odoo_password,
           model, 'create', data],
@@ -226,7 +227,7 @@ function OdooApi(host, db) {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
           'Access-Control-Allow-Headers': '*'
         },
-        url: odoo_api.odoo_host + 'xmlrpc/object',
+        url: odoo_api.odoo_proxy + 'xmlrpc/object',
         methodName: 'execute',
         params: [odoo_api.odoo_db, odoo_api.odoo_uid, odoo_api.odoo_password,
           model, 'unlink', ids],
@@ -263,7 +264,7 @@ function OdooApi(host, db) {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
           'Access-Control-Allow-Headers': '*'
         },
-        url: odoo_api.odoo_host + 'xmlrpc/object',
+        url: odoo_api.odoo_proxy + 'xmlrpc/object',
         methodName: 'execute',
         params: params,
         timeout: 7000000,

@@ -20,8 +20,10 @@ export class Services {
               public lugaresEntry: LugaresEntry,
               public util: UtilTool) {
 
-    this.audioguiaSQLiteHelper.initDb();
-    this.odoo = new OdooApi(APP_CONFIG.SERVER_URL, APP_CONFIG.DATABASE_NAME);
+    this.audioguiaSQLiteHelper.initDb().then(() => {
+    }).catch(() => {
+    });
+    this.odoo = new OdooApi(APP_CONFIG.SERVER_URL, APP_CONFIG.PROXY || '/api/', APP_CONFIG.DATABASE_NAME);
 
   }
 
@@ -31,8 +33,10 @@ export class Services {
       let self = this;
       self.odoo = this.odoo;
       this.odoo.login(APP_CONFIG.EMAIL, APP_CONFIG.PASS_EMAIL).then((uid) => {
+        debugger;
         resolve(uid);
       }).catch(ex => {
+          debugger;
           reject({status: 500, message: ex || 'Error consultando lugares '});
         }
       );
@@ -48,11 +52,13 @@ export class Services {
       self.odoo.search_read('audioguia.lugares', defaultQuery, fields).then(async value => {
         console.log(value);
 
-        let array: Array<ILugar> = new Array();
+        debugger;
+        let newArray: Array<ILugar> = new Array();
+        let updateArray: Array<ILugar> = new Array();
+        let item: LugaresBo = null;
 
         for (var data of value) {
-          let item: LugaresBo = new LugaresBo(data);
-          let lugarImgs: Array<ImagenesBo> = new Array();
+          item = new LugaresBo(data);
           item.imagenes = this.util.getListIds(data.imagenes);
           const lugar: ILugar = {
             id: 0,
@@ -74,59 +80,30 @@ export class Services {
             rutas: item.rutas,
             lugares: item.lugares,
             url: item.url,
-            icon_marker: item.icon_marker
+            icon_marker: item.icon_marker,
+            audio_name: item.audio_name
           };
-
-          array.push(lugar);
-          //GUARDAR ID EN TABLA IMAGENES
-
-          /*
-                    if(action.equals("update"))
-                      db.update(TABLE_NAME:values, ID_ODOO+"="+item.getId(), null);
-                    else {
-                      db.insert(TABLE_NAME, null, values);
-                    }
-                    */
+          await LugaresBo.exist(item.id_odoo).then(exist => {
+            if (exist) {
+              updateArray.push(lugar);
+            }
+            else {
+              newArray.push(lugar);
+            }
+          }).catch(() => {
+          });
 
 
-          /*
-          for (var img of data.imagenes) {
-            await self.getImage(img).then(image => {
-              lugarImgs.push(new ImagenesBo(image));
-            }).catch(error => {
-            });
-          }
-          lugar.imagenes = lugarImgs;
-          UtilTool.lugares.push(lugar);
-          */
-
+          await this.addIdsImages(item.imagenes).then(() => {
+          }).catch(() => {
+          });
         }
 
-        /*
-        UtilTool.lugares = new Array();
-        for (var data of value) {
-          let lugar: LugaresBo = new LugaresBo(data);
-          let lugarImgs: Array<ImagenesBo> = new Array();
-          for (var img of data.imagenes) {
-            await self.getImage(img).then(image => {
-                lugarImgs.push(new ImagenesBo(image));
-              }).catch(error => {
-              });
-          }
-          lugar.imagenes = lugarImgs;
-          UtilTool.lugares.push(lugar);
-
-        }
-        */
-
-        await LugaresBo.saveAllJson(array).then(success => {
+        await LugaresBo.saveAllJson(newArray, updateArray).then(success => {
           resolve(true);
         }).catch(ex => {
           reject({status: 500, message: ex || 'Error Sync Lugares '});
         });
-
-        debugger;
-
 
       }).catch(ex => {
           debugger;
@@ -136,13 +113,35 @@ export class Services {
     });
   }
 
-  /*
-  async getImageById(id) {
-    await this.getImage(id);
+  addIdsImages(ids: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      if (ids) {
+        let arrayIds: Array<string> = ids.split(",");
+        if (arrayIds.length > 0) {
+          for (let img of arrayIds) {
+            new ImagenesBo().exist(img).then(async exist => {
+              if (exist === false) {
+                await new ImagenesBo().insert(img).then().catch();
+              }
+              await this.getImage(img).then(async image => {
+                await new ImagenesBo().update(image).then(() => {
+                  resolve();
+                }).catch(ex => {
+                  reject();
+                });
+              }).catch(ex => {
+                reject();
+              });
+            }).catch(ex => {
+              reject();
+            });
+          }
+        }
+      }
+    });
   }
-  */
 
-  getImage(id) {
+  getImage(id: string): Promise<ImagenesBo> {
     return new Promise((resolve, reject) => {
       let self = this;
       self.odoo = this.odoo;
@@ -150,9 +149,13 @@ export class Services {
       const defaultQuery = [['id', '=', id]];
       self.odoo.search_read('audioguia.imagenes', defaultQuery, fields).then(value => {
         if (value[0]) {
-          const img = self.domSanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64, ' + value[0].image);
+          const img = self.domSanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + value[0].image);
           console.log(img);
-          resolve({id: value[0].id, image: img['changingThisBreaksApplicationSecurity']});
+          resolve(new ImagenesBo({
+            id: value[0].id,
+            id_odoo: value[0].id,
+            image: img['changingThisBreaksApplicationSecurity']
+          }));
         } else {
           reject({status: 500, message: 'Error consultando imagen ' + id});
         }
