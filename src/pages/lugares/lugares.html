@@ -1,13 +1,4 @@
-<ion-header>
-  <ion-navbar>
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>{{title}}</ion-title>
-  </ion-navbar>
-</ion-header>
-
-
+<custom-header title="{{title}}"></custom-header>
 <ion-content no-padding has-header>
   <ion-card *ngFor="let item of lugaresItems">
     <div (click)="openItem(item)">
