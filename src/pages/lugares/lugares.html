@@ -3,45 +3,47 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>{{ 'CARDS_TITLE' | translate }}</ion-title>
+    <ion-title>{{title}}</ion-title>
   </ion-navbar>
 </ion-header>
 
 
-<ion-content>
+<ion-content no-padding has-header>
   <ion-card *ngFor="let item of lugaresItems">
     <div (click)="openItem(item)">
-      <ion-item>
-        <img item-start [src]="domSanitizationService.bypassSecurityTrustUrl(item.images_bo[0].image)"
-             *ngIf="item.images_bo &&  item.images_bo.length > 0">
+      <ion-item no-padding no-margin no-lines>
+        <ion-avatar>
+          <img [src]="domSanitizationService.bypassSecurityTrustUrl(item.images_bo[0].image)"
+               *ngIf="item.images_bo && item.images_bo.length > 0">
+        </ion-avatar>
         <h2>{{item.name}}</h2>
-        <p>{{item.descripcion}}</p>
+        <p>{{item.tipo}}</p>
       </ion-item>
 
-      <!--<img [src]="item.image">-->
-
-      <ion-card-content>
-        <p>{{item.descripcion}}</p>
-      </ion-card-content>
+      <!--<ion-card-content>-->
+      <!--<p>{{item.descripcion}}</p>-->
+      <!--</ion-card-content>-->
     </div>
 
-    <ion-row>
+    <ion-row class="card-footer">
       <ion-col>
-        <button ion-button color="primary" clear small icon-start>
-          <ion-icon name='thumbs-up'></ion-icon>
-          12 Likes
+        <button ion-button color="light" clear small icon-start>
+          <!--<ion-icon name='thumbs-up'></ion-icon>-->
+          <img src="assets/img/icon_liked.png"/>&nbsp;&nbsp;
+          {{item.score}}
         </button>
       </ion-col>
       <ion-col>
-        <button ion-button color="primary" clear small icon-start>
-          <ion-icon name='text'></ion-icon>
-          4 Comments
+        <button ion-button color="light" clear small icon-start>
+          <img src="assets/img/icon_distance.png"/>&nbsp;&nbsp;
+          {{item.distance}}
         </button>
       </ion-col>
-      <ion-col center text-center>
-        <ion-note>
-          11h ago
-        </ion-note>
+      <ion-col *ngIf="item.tipo !== 'place'">
+        <button ion-button color="light" clear small icon-start>
+          <img src="assets/img/icon_time.png"/>&nbsp;&nbsp;
+          <!--{{item.descripcion}}-->
+        </button>
       </ion-col>
     </ion-row>
   </ion-card>
@@ -54,3 +56,28 @@
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
 </ion-content>
+
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <button ion-button clear text-center>
+            <ion-icon name='star' icon-medium></ion-icon>
+          </button>
+        </ion-col>
+        <ion-col>
+          <button ion-button clear text-center>
+            <i class="icon icon-sort-alphabetical" icon-medium></i>
+          </button>
+        </ion-col>
+        <ion-col>
+          <button ion-button clear text-center>
+            <img src="assets/img/icon_time.png"/>
+          </button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>

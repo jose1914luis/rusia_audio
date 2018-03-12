@@ -33,6 +33,7 @@ export class LugaresBo {
     this._write_date = obj.write_date;
     this._url = obj.url;
     this._icon_marker = obj.icon_marker;
+    this._distance = obj.distance || 0;
     this._images_bo = new Array();
   }
 
@@ -235,6 +236,16 @@ export class LugaresBo {
 
   set lugares(value: string) {
     this._lugares = value;
+  }
+
+  private _distance: number;
+
+  get distance(): number {
+    return this._distance;
+  }
+
+  set distance(value: number) {
+    this._distance = value;
   }
 
   private _calificado: number;

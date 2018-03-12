@@ -2,8 +2,8 @@ import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {ErrorHandler, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {Camera} from '@ionic-native/camera';
-import { Media } from '@ionic-native/media';
-import { MusicControls } from '@ionic-native/music-controls';
+import {Media} from '@ionic-native/media';
+import {MusicControls} from '@ionic-native/music-controls';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {StatusBar} from '@ionic-native/status-bar';
 import {IonicStorageModule, Storage} from '@ionic/storage';
@@ -11,6 +11,7 @@ import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
 
+import {Geolocation} from '@ionic-native/geolocation';
 import {AgmCoreModule} from '@agm/core';
 
 import {Settings} from '../providers/providers';
@@ -88,6 +89,7 @@ export function provideSettings(storage: Storage) {
     StatusBar,
     Services,
     UtilTool,
+    Geolocation,
     SQLite,
     SQLitePorter,
     AudioguiaSQLiteHelper,

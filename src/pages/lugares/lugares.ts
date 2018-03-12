@@ -7,10 +7,11 @@ import {LugaresBo} from "../../models/LugaresBo";
 import {ImagenesBo} from "../../models/ImagenesBo";
 import {AudioguiaSQLiteHelper} from "../../database/AudioguiaSQLiteHelper";
 import {DomSanitizer} from "@angular/platform-browser";
+import {Geolocation} from '@ionic-native/geolocation';
 
 @IonicPage()
 @Component({
-  selector: 'page-cards',
+  selector: 'page-lugares',
   templateUrl: 'lugares.html',
   providers: [Services, UtilTool]
 })
@@ -18,11 +19,13 @@ export class LugaresPage {
 
   lugaresItems: Array<LugaresBo> = new Array();
   page: number = 1;
+  title: string = "";
 
   constructor(public navCtrl: NavController,
               public util: UtilTool,
               public audioguiaSQLiteHelper: AudioguiaSQLiteHelper,
               public domSanitizationService: DomSanitizer,
+              public geolocation: Geolocation,
               public services: Services) {
 
     console.log('entro');
@@ -55,7 +58,7 @@ export class LugaresPage {
   async cargarLugares() {
     await new LugaresBo().get(this.page).then(async data => {
         for (let lugar of data) {
-          let obj: LugaresBo = new LugaresBo(lugar);
+          let obj: LugaresBo = lugar;
           if (obj.imagenes !== "0") {
             let img_lugar: Array<ImagenesBo> = new Array();
             for (let id_image of obj.imagenes.split(',')) {
@@ -70,6 +73,10 @@ export class LugaresPage {
               }
             }
           }
+          await this.getDistance(obj.latitud || 0, obj.longitud || 0).then(distance => {
+            obj.distance = distance;
+          }).catch(() => {
+          });
           this.lugaresItems.push(obj);
         }
       }
@@ -78,4 +85,19 @@ export class LugaresPage {
       console.log(e);
     });
   }
+
+  getDistance(lat: number, lon: number): Promise<number> {
+    return new Promise((resolve, reject) => {
+      this.geolocation.getCurrentPosition().then((resp) => {
+        debugger;
+        // resp.coords.latitude
+        // resp.coords.longitude
+        resolve(this.util.calculateDistance(resp.coords.latitude, resp.coords.longitude, lat, lon, 'K'));
+      }).catch((error) => {
+        console.log('Error getting location', error);
+        resolve(0);
+      });
+    });
+  }
+
 }

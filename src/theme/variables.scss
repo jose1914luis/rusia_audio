@@ -4,7 +4,6 @@ $font-path: "../assets/fonts";
 
 @import "ionic.globals";
 
-
 // Shared Variables
 // --------------------------------------------------
 // To customize the look and feel of this app, you can override
@@ -12,9 +11,8 @@ $font-path: "../assets/fonts";
 // To view all the possible Ionic variables, see:
 // http://ionicframework.com/docs/v2/theming/overriding-ionic-variables/
 
-$text-color:        #000;
-$background-color:  #fff;
-
+$text-color: #000;
+$background-color: #fff;
 
 // Named Color Variables
 // --------------------------------------------------
@@ -25,11 +23,18 @@ $background-color:  #fff;
 // The "primary" color is the only required color in the map.
 
 $colors: (
-  primary:    #FF4D1B,
-  secondary:  #488aff,
-  danger:     #f53d3d,
-  light:      #f4f4f4,
-  dark:       #222
+  primary: #FF4D1B,
+  secondary: #488aff,
+  danger: #f53d3d,
+  light: #f4f4f4,
+  dark: #222,
+  gray: #d3d3d3,
+  accent: #FF5722,
+  primaryDark: #BF360C,
+  controlNormal: #CCCCCC,
+  controlActivated: #ffffff,
+  controlHighlight: #ffffff,
+  textColorHint: #CCCCCC
 );
 
 $toolbar-background: #FF4D1B;
@@ -44,27 +49,17 @@ $colors: (
 );
 */
 
-
 // App iOS Variables
 // --------------------------------------------------
 // iOS only Sass variables can go here
-
-
-
 
 // App Material Design Variables
 // --------------------------------------------------
 // Material Design only Sass variables can go here
 
-
-
-
 // App Windows Variables
 // --------------------------------------------------
 // Windows only Sass variables can go here
-
-
-
 
 // App Theme
 // --------------------------------------------------
@@ -75,13 +70,20 @@ $colors: (
 
 @import "ionic.theme.default";
 
+// App Main Sass
+// --------------------------------------------------
+@import "theme";
 
 // Ionicons
 // --------------------------------------------------
 // The premium icon font for Ionic. For more info, please see:
 // http://ionicframework.com/docs/v2/ionicons/
 
-@import "ionic.ionicons";
+// // App Fontelo Style
+//--------------------------------------------------
+@import "fontello";
+
+@import "ionicons";
 
 
 // Fonts

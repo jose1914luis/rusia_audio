@@ -1,3 +1,29 @@
-page-cards {
+page-lugares {
+  .item-md ion-avatar ion-img, .item-md ion-avatar img {
+    border-radius: 0%;
+    height: 120px !important;
+    width: 100%;
+  }
 
+  .card > div > .item {
+    background: #424242;
+  }
+
+  .label-md {
+    margin: 0px;
+  }
+
+  .card h2 {
+    color: #f4f4f4;
+    font-weight: bold;
+  }
+
+  .card p {
+    color: #d3d3d3;
+  }
+
+  .card-footer {
+    background: #000000;
+    opacity: 0.8;
+  }
 }
