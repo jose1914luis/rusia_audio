@@ -1,0 +1,7 @@
+<p text-center no-margin>{{label}}</p>
+<div class="progress-outer">
+  <div class="progress-inner" [style.width]="progress + '%'">
+    <b *ngIf="progress > 0">{{progress}} %</b>
+    <b *ngIf="progress <=0">Cargando...</b>
+  </div>
+</div>

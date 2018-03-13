@@ -1,0 +1,24 @@
+<ion-navbar [hidden]="true" *navbar>
+</ion-navbar>
+
+<ion-content no-padding no-margin>
+  <div class="splash" no-padding no-margin>
+    <div block>
+      <img src="assets/img/ic_icon.png" class="logo">
+      <br/>
+      <p text-center>Por favor permanezca conectado a internet \n mientras se descarga/actualiza el contenido</p>
+    </div>
+  </div>
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col width-80>
+          <progress-bar [progress]="progress" [label]="label"></progress-bar>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>
+

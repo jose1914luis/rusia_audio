@@ -2,9 +2,9 @@ import {Component, ViewChild} from '@angular/core';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {StatusBar} from '@ionic-native/status-bar';
 import {TranslateService} from '@ngx-translate/core';
-import {Config, Nav, Platform} from 'ionic-angular';
+import {Config, ModalController, Nav, Platform} from 'ionic-angular';
 
-import {FirstRunPage} from '../pages/pages';
+import {FirstRunPage, SplashPage} from '../pages/pages';
 import {Settings, Services} from '../providers/providers';
 import {UtilTool} from "../providers/util";
 import {AudioguiaSQLiteHelper} from "../database/AudioguiaSQLiteHelper";
@@ -20,7 +20,7 @@ import {AudioguiaSQLiteHelper} from "../database/AudioguiaSQLiteHelper";
 
       <ion-content>
         <ion-list>
-          <button menuClose ion-item (click)="openPage({title: 'Home', component: 'ContentPage', icon: ''})">
+          <button menuClose ion-item (click)="openPage({title: 'Home', component: 'MainPage', icon: ''})">
             <ion-icon name="home"></ion-icon>
             Home
           </button>
@@ -47,27 +47,136 @@ export class MyApp {
               private config: Config,
               private statusBar: StatusBar,
               private services: Services,
+              private util: UtilTool,
+              private modalCtrl: ModalController,
               private audioguiaSQLiteHelper: AudioguiaSQLiteHelper,
               private splashScreen: SplashScreen) {
+
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+
+
+      const splash = this.modalCtrl.create(SplashPage);
+      splash.onDidDismiss(data => {
+        console.log(data);
+      });
+      splash.present();
+
+      this.initSync(util);
     });
+
     this.initTranslate();
-    this.initSync();
+
   }
 
-  initSync() {
+  validSync(): boolean {
+
+    var fecha_last_sync: Date = new Date(localStorage.getItem(this.util.Keys.lastSync));
+    var fecha = fecha_last_sync.getDate() + "/" + this.util.padLeft((fecha_last_sync.getMonth() ).toString(), 2, "0") + "/" + fecha_last_sync.getFullYear();
+
+    var current_date = new Date();
+
+    var diff = (current_date.getTime()) - fecha_last_sync.getTime();
+
+    var segundos = diff / 1000;
+    var minutos = segundos / 60;
+    var horas = minutos / 60;
+    var dias = horas / 24;
+
+    console.log("current_date");
+    console.log(current_date);
+
+    console.log("diff");
+    console.log(diff);
+
+    console.log("segundos");
+    console.log(segundos);
+
+    console.log("minutos");
+    console.log(minutos);
+
+    console.log("horas");
+    console.log(horas);
+
+    console.log("dias");
+    console.log(dias);
+
+    console.log("FrecuenciaSincronizacion");
+    console.log(5);
+
+
+    if (horas <= 5)
+      return false;
+    else
+      return true;
+  }
+
+  initSync(util) {
     this.audioguiaSQLiteHelper.initDb().then(() => {
       this.services.login().then(
-        () => {
-          // this.services.getLugares().then(()=>{}).catch(()=>{});
+        async () => {
+
+          if (this.validSync()) {
+
+            UtilTool.progressBar.emit({progress: 5, label: 'Obteniendo ciudades...'});
+            await this.services.syncCiudades().then(() => {
+            }).catch(() => {
+            });
+
+            UtilTool.progressBar.emit({progress: 15, label: 'Obteniendo rutas...'});
+            await this.services.syncRutas().then(() => {
+            }).catch(() => {
+            });
+
+            UtilTool.progressBar.emit({progress: 30, label: 'Obteniendo lugares...'});
+            await this.services.syncLugares().then(() => {
+            }).catch(() => {
+            });
+
+            UtilTool.progressBar.emit({progress: 35, label: 'Obteniendo información...'});
+            await this.services.syncGeneral(util.Apartados.informacion, "audioguia.informaciones").then(() => {
+            }).catch(() => {
+            });
+
+            UtilTool.progressBar.emit({progress: 50, label: 'Obteniendo curiosidades del metro...'});
+            await this.services.syncGeneral(util.Apartados.curiosidad, "audioguia.curiosidades").then(() => {
+            }).catch(() => {
+            });
+
+
+            UtilTool.progressBar.emit({progress: 55, label: 'Obteniendo curiosidades del metro...'});
+            await this.services.syncGeneral(util.Apartados.curiosidad_metro, "audioguia.curiosidades.metro").then(() => {
+            }).catch(() => {
+            });
+
+            UtilTool.progressBar.emit({progress: 70, label: 'Obteniendo estaciones del metro...'});
+            await this.services.syncEstacionesMetro().then(() => {
+            }).catch(() => {
+            });
+
+
+            UtilTool.progressBar.emit({progress: 85, label: 'Obteniendo esquema del metro...'});
+            await this.services.syncGeneral(util.Apartados.esquema, "audioguia.esquema.metro").then(() => {
+            }).catch(() => {
+            });
+
+
+            UtilTool.progressBar.emit({progress: 100, label: 'Obteniendo historia del metro...'});
+            await this.services.syncGeneral(util.Apartados.historia, "audioguia.historia.metro").then(() => {
+            }).catch(() => {
+            });
+
+          }
+          localStorage.setItem(this.util.Keys.lastSync, (new Date().toISOString()));
+          UtilTool.closetSplashScreen.emit(true);
         }
       ).catch(ex => {
         console.log('initSync login');
         console.log(ex);
+        UtilTool.closetSplashScreen.emit(true);
       });
 
     }).catch(ex => {
@@ -103,7 +212,7 @@ export class MyApp {
   }
 
   openPage(page) {
-    // Reset the content nav to have just this page
+    // Reset the main nav to have just this page
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
     //this.nav.setRoot(page.component);

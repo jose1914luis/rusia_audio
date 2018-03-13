@@ -1,12 +1,26 @@
 import {AudioguiaSQLiteHelper} from "../database/AudioguiaSQLiteHelper";
+import {CitysEntry} from "../database/AudioguiaData";
+import {ICity} from "../interface/ICity";
+import {APP_CONFIG} from "../../constants";
 
 export class CityBo {
+
   private _id: number;
+  private _id_odoo: number;
   private _name: string;
   private _image: string;
-  private _playStore: string = "";
-  private _helper: AudioguiaSQLiteHelper;
+  private _url: string;
 
+  constructor(obj = null) {
+    if (!obj) {
+      return;
+    }
+    this._id = obj.id;
+    this._id_odoo = obj.id_odoo;
+    this._name = obj.name;
+    this._image = obj.image;
+    this._url = obj.url;
+  }
 
   get id(): number {
     return this._id;
@@ -14,6 +28,14 @@ export class CityBo {
 
   set id(value: number) {
     this._id = value;
+  }
+
+  get id_odoo(): number {
+    return this._id_odoo;
+  }
+
+  set id_odoo(value: number) {
+    this._id_odoo = value;
   }
 
   get name(): string {
@@ -32,76 +54,93 @@ export class CityBo {
     this._image = value;
   }
 
-  get playStore(): string {
-    return this._playStore;
+  get url(): string {
+    return this._url;
   }
 
-  set playStore(value: string) {
-    this._playStore = value;
+  set url(value: string) {
+    this._url = value;
   }
 
-  get helper(): AudioguiaSQLiteHelper {
-    return this._helper;
+  public static saveAllJson(newData: Array<ICity>, updateData: Array<ICity>) {
+    console.log(newData);
+    console.log(updateData);
+    return new Promise((resolve, reject) => {
+      const cityEntry: CitysEntry = new CitysEntry();
+      var json = {
+        "structure": {
+          "tables": {
+            "citys": " (" +
+            "[" + cityEntry.ID + "], " +
+            "[" + cityEntry.ID_ODOO + "], [" + cityEntry.NAME + "]," +
+            "[" + cityEntry.URL + "], [" + cityEntry.IMAGE + "]" +
+            ")"
+          }
+        },
+        "data": {
+          "inserts": {
+            "citys": newData
+          }
+        }
+      };
+
+      AudioguiaSQLiteHelper.sqlitePorter.importJsonToDb(AudioguiaSQLiteHelper.db, json).then(success => {
+        console.log("success json CityBo");
+        console.log(success);
+        resolve(success);
+      }).catch((error) => {
+        console.log("error json CityBo");
+        console.log(error);
+        reject(error);
+      });
+    });
   }
 
-  set helper(value: AudioguiaSQLiteHelper) {
-    this._helper = value;
+  public get(page: number): Promise<Array<CityBo>> {
+    return new Promise((resolve, reject) => {
+
+      const cityEntry: CitysEntry = new CitysEntry();
+      const query = "SELECT * FROM " + cityEntry.TABLE_NAME; //+ " ORDER BY " + cityEntry.NAME + " LIMIT ? OFFSET ? ";
+      //[APP_CONFIG.LIMIT_SQL, ( APP_CONFIG.LIMIT_SQL * page)]
+      AudioguiaSQLiteHelper.db.executeSql(query, [])
+        .then((data) => {
+          console.log('Executed SQL CityBo get');
+          let array: Array<CityBo> = new Array();
+          console.log(data.rows);
+          if (data.rows.length > 0) {
+            for (let i = 0; i < data.rows.length; i++) {
+              console.log(data.rows.item(i));
+              array.push(new CityBo(data.rows.item(i)));
+            }
+          }
+          console.log('fin Executed SQL CityBo get');
+          console.log(array);
+          resolve(array);
+        })
+        .catch(ex => {
+          console.log(ex);
+          reject({status: 500, message: ex || 'Error CityBo get '});
+        });
+    });
   }
 
-  /*
-  public CityBo() {
+  public static exist(id: number): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      AudioguiaSQLiteHelper.db.executeSql(new CitysEntry().SELECT_ONE, [id])
+        .then((data) => {
+          console.log('Executed SQL CityBo exist ' + data.rows.item(0));
+          if (data.rows.item(0)) {
+            resolve(true);
+          }
+          else {
+            resolve(false);
+          }
+        })
+        .catch(ex => {
+          console.log(ex);
+          reject({status: 500, message: ex || 'Error CityBo exist '});
+        });
+    });
   }
 
-  public CityBo(helper: AudioguiaSQLiteHelper) {
-    this.helper = helper;
-  }*/
-
-  /*
-  public static CityBo find(number id, SQLiteDatabase db){
-      string query = "select * from citys where id_odoo = " + id;
-      Cursor c = db.rawQuery(query, null);
-      CityBo item = null;
-      if(c.moveToFirst()){
-          item = new CityBo();
-          item.setId(c.getInt(c.getColumnIndex(AudioguiaData.CitysEntry.ID_ODOO)));
-          item.setName(c.getString(c.getColumnIndex(AudioguiaData.CitysEntry.NAME)));
-          item.setImage(c.getString(c.getColumnIndex(AudioguiaData.CitysEntry.IMAGE)));
-          item.setPlayStore(c.getString(c.getColumnIndex(AudioguiaData.CitysEntry.PLAY_STORE)));
-      }
-      c.close();
-      return item;
-  }
-
-  public static List<CityBo> all(SQLiteDatabase db){
-      string query = "select * from citys";
-      Cursor c = db.rawQuery(query, null);
-      List<CityBo> items = new ArrayList<>();
-      while (c.moveToNext()){
-          CityBo item = new CityBo();
-          item.setId(c.getInt(c.getColumnIndex(AudioguiaData.CitysEntry.ID_ODOO)));
-          item.setName(c.getString(c.getColumnIndex(AudioguiaData.CitysEntry.NAME)));
-          item.setImage(c.getString(c.getColumnIndex(AudioguiaData.CitysEntry.IMAGE)));
-          item.setPlayStore(c.getString(c.getColumnIndex(AudioguiaData.CitysEntry.PLAY_STORE)));
-          items.add(item);
-      }
-      c.close();
-      return items;
-  }
-
-  public long save(){
-      SQLiteDatabase db = helper.getWritableDatabase();
-      ContentValues values = new ContentValues();
-      values.put(AudioguiaData.CitysEntry.ID_ODOO, this.Id);
-      values.put(AudioguiaData.CitysEntry.NAME, this.Name);
-      values.put(AudioguiaData.CitysEntry.IMAGE, this.Image);
-      values.put(AudioguiaData.CitysEntry.PLAY_STORE, this.PlayStore);
-      long result = 0;
-      if(find(this.Id, db) == null)
-          result = db.insert(AudioguiaData.CitysEntry.TABLE_NAME, null, values);
-      else
-          result = db.update(AudioguiaData.CitysEntry.TABLE_NAME, values, "id_odoo = " + this.Id, null);
-      db.close();
-      return result;
-  }
-  */
 }

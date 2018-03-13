@@ -1,0 +1,18 @@
+page-general .item-md ion-avatar ion-img, page-general .item-md ion-avatar img {
+  border-radius: 0%;
+  height: 120px !important;
+  width: 100%; }
+page-general .card > div > .item {
+  background: #424242; }
+page-general .label-md {
+  margin: 0px; }
+page-general .card h2 {
+  color: #f4f4f4;
+  font-weight: bold; }
+page-general .card p {
+  color: #d3d3d3; }
+page-general .card-footer {
+  background: #000000;
+  opacity: 0.8; }
+
+/*# sourceMappingURL=general.css.map */

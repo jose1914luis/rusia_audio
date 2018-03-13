@@ -34,6 +34,7 @@ export class LugaresBo {
     this._url = obj.url;
     this._icon_marker = obj.icon_marker;
     this._distance = obj.distance || 0;
+    this._display_distance = obj.display_distance || '0 Km';
     this._images_bo = new Array();
   }
 
@@ -158,33 +159,33 @@ export class LugaresBo {
     this._tipo = value;
   }
 
-  private _comer: number;
+  private _comer: string;
 
-  get comer(): number {
+  get comer(): string {
     return this._comer;
   }
 
-  set comer(value: number) {
+  set comer(value: string) {
     this._comer = value;
   }
 
-  private _dormir: number;
+  private _dormir: string;
 
-  get dormir(): number {
+  get dormir(): string {
     return this._dormir;
   }
 
-  set dormir(value: number) {
+  set dormir(value: string) {
     this._dormir = value;
   }
 
-  private _interes: number;
+  private _interes: string;
 
-  get interes(): number {
+  get interes(): string {
     return this._interes;
   }
 
-  set interes(value: number) {
+  set interes(value: string) {
     this._interes = value;
   }
 
@@ -198,13 +199,13 @@ export class LugaresBo {
     this._numbereres = value;
   }
 
-  private _es_gratis: number;
+  private _es_gratis: string;
 
-  get es_gratis(): number {
+  get es_gratis(): string {
     return this._es_gratis;
   }
 
-  set es_gratis(value: number) {
+  set es_gratis(value: string) {
     this._es_gratis = value;
   }
 
@@ -246,6 +247,16 @@ export class LugaresBo {
 
   set distance(value: number) {
     this._distance = value;
+  }
+
+  private _display_distance: string;
+
+  get display_distance(): string {
+    return this._display_distance;
+  }
+
+  set display_distance(value: string) {
+    this._display_distance = value;
   }
 
   private _calificado: number;
@@ -298,12 +309,11 @@ export class LugaresBo {
     this._images_bo = value;
   }
 
-  public static saveAllJson(newLugares: Array<ILugar>, updateLugares: Array<ILugar>) {
-    console.log(newLugares);
-    console.log(updateLugares);
+  public static saveAllJson(newData: Array<ILugar>, updateData: Array<ILugar>) {
+    console.log(newData);
+    console.log(updateData);
     return new Promise((resolve, reject) => {
       const lugaresEntry: LugaresEntry = new LugaresEntry();
-      const table_name: string = lugaresEntry.TABLE_NAME;
       var json = {
         "structure": {
           "tables": {
@@ -324,7 +334,7 @@ export class LugaresBo {
         },
         "data": {
           "inserts": {
-            "lugares": newLugares
+            "lugares": newData
           }
         }
       };
@@ -334,18 +344,45 @@ export class LugaresBo {
         console.log(success);
         resolve(success);
       }).catch((error) => {
-        console.log("error json Sectores");
+        console.log("error json Lugares");
         console.log(error);
         reject(error);
       });
-
     });
   }
 
-  public get(page: number): Promise<Array<LugaresBo>> {
-    const query: string = "SELECT * FROM lugares LIMIT " + APP_CONFIG.LIMIT_SQL + " OFFSET " + APP_CONFIG.LIMIT_SQL * page;
+  public get(page: number, where: string = ""): Promise<Array<LugaresBo>> {
     return new Promise((resolve, reject) => {
-      AudioguiaSQLiteHelper.db.executeSql(query, [])
+
+      const lugaresEntry: LugaresEntry = new LugaresEntry();
+      const query = "SELECT * FROM " + lugaresEntry.TABLE_NAME + " " + where + " ORDER BY " + lugaresEntry.NAME + " LIMIT ? OFFSET ? ";
+      AudioguiaSQLiteHelper.db.executeSql(query, [APP_CONFIG.LIMIT_SQL, ( APP_CONFIG.LIMIT_SQL * page)])
+        .then((data) => {
+          console.log('Executed SQL LugaresBo get');
+          let array: Array<LugaresBo> = new Array();
+          console.log(data.rows);
+          if (data.rows.length > 0) {
+            for (let i = 0; i < data.rows.length; i++) {
+              console.log(data.rows.item(i));
+              array.push(new LugaresBo(data.rows.item(i)));
+            }
+          }
+          console.log('fin Executed SQL LugaresBo get');
+          console.log(array);
+          resolve(array);
+        })
+        .catch(ex => {
+          console.log(ex);
+          reject({status: 500, message: ex || 'Error LugaresBo get '});
+        });
+    });
+  }
+
+  public all(): Promise<Array<LugaresBo>> {
+    return new Promise((resolve, reject) => {
+
+      const lugaresEntry: LugaresEntry = new LugaresEntry();
+      AudioguiaSQLiteHelper.db.executeSql(lugaresEntry.SELECT_ALL, [])
         .then((data) => {
           console.log('Executed SQL LugaresBo get');
           let array: Array<LugaresBo> = new Array();
@@ -368,9 +405,8 @@ export class LugaresBo {
   }
 
   public static exist(id: number): Promise<boolean> {
-    const query: string = "SELECT id_odoo FROM lugares WHERE id_odoo = ? ";
     return new Promise((resolve, reject) => {
-      AudioguiaSQLiteHelper.db.executeSql(query, [id])
+      AudioguiaSQLiteHelper.db.executeSql(new LugaresEntry().SELECT_ONE, [id])
         .then((data) => {
           console.log('Executed SQL LugaresBo exist ' + data.rows.item(0));
           if (data.rows.item(0)) {

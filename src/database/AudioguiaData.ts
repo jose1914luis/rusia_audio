@@ -1,69 +1,5 @@
 import {Injectable} from '@angular/core';
 
-@Injectable()
-class FavoritosEntry {
-  public TABLE_NAME: string = "favoritos";
-  public ID: string = "id";
-  public FK: string = "fk";
-  public NAME: string = "name";
-  public SECCION: string = "seccion";
-  public IMAGENES: string = "imagenes";
-  public CREATE: string =
-    "CREATE TABLE IF NOT EXISTS " + this.TABLE_NAME +
-    " (" +
-    this.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-    this.FK + " INTEGER, " +
-    this.SECCION + " TEXT, " +
-    this.IMAGENES + " TEXT, " +
-    this.NAME + " TEXT" +
-    ")";
-
-  public DELETE: string = "DROP TABLE IF EXISTS " + this.TABLE_NAME;
-};
-
-@Injectable()
-class RutasEntry {
-  public TABLE_NAME: string = "rutas";
-
-  public ID: string = "id";
-  public ID_ODOO: string = "id_odoo";
-  public NAME: string = "name";
-  public AUDIO: string = "audio";
-  public DESCRIPTION: string = "description";
-  public SCORE: string = "score";
-  public DISTANCIA: string = "distancia";
-  public DURACION: string = "duracion";
-  public RUTA: string = "ruta";
-  public ES_GRATIS: string = "es_gratis";
-  public IMAGENES: string = "imagenes";
-  public RUTAS_IDS: string = "rutas_ids";
-  public LUGARES_IDS: string = "lugares_ids";
-  public AUDIO_NAME: string = "audio_name";
-  public CALIFICADO: string = "calificado";
-  public WRITE_DATE: string = "write_date";
-
-  public CREATE: string =
-    "CREATE TABLE IF NOT EXISTS " + this.TABLE_NAME + " (" +
-    this.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-    this.ID_ODOO + " INTEGER, " +
-    this.NAME + " TEXT, " +
-    this.DESCRIPTION + " TEXT, " +
-    this.SCORE + " INTEGER, " +
-    this.DISTANCIA + " TEXT, " +
-    this.DURACION + " TEXT, " +
-    this.RUTA + " TEXT, " +
-    this.ES_GRATIS + " INTEGER, " +
-    this.CALIFICADO + " INTEGER DEFAULT 0, " +
-    this.IMAGENES + " TEXT, " +
-    this.RUTAS_IDS + " TEXT, " +
-    this.AUDIO_NAME + " TEXT, " +
-    this.AUDIO + " TEXT, " +
-    this.WRITE_DATE + " TEXT, " +
-    this.LUGARES_IDS + " TEXT)";
-
-  public DELETE: string =
-    "DROP TABLE IF EXISTS " + this.TABLE_NAME;
-}
 
 @Injectable()
 class LugaresEntry {
@@ -132,13 +68,42 @@ class LugaresEntry {
 
   // public UPDATE = "UPDATE " + this.TABLE_NAME + " SET " + this.IMAGE + "= ? WHERE " + this.ID_ODOO + " = ? ";
 
-  public EXIST = "SELECT * FROM " + this.TABLE_NAME + " WHERE " + this.ID_ODOO + " = ? ";
+  public SELECT_ONE = "SELECT * FROM " + this.TABLE_NAME + " WHERE " + this.ID_ODOO + " = ? LIMIT 1 ";
+
+  public SELECT_ALL = "SELECT * FROM " + this.TABLE_NAME;
+
+  public SELECT_LIMIT = "SELECT * FROM " + this.TABLE_NAME + " ? ORDER BY " + this.NAME + " LIMIT ? OFFSET ? ";
+
+}
+
+@Injectable()
+class CitysEntry {
+  public TABLE_NAME = "citys";
+
+  public ID: string = "id";
+  public ID_ODOO: string = "id_odoo";
+  public IMAGE: string = "image";
+  public NAME: string = "name";
+  public URL: string = "url";
+
+  public CREATE: string =
+    "CREATE TABLE IF NOT EXISTS " + this.TABLE_NAME + " (" +
+    this.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+    this.ID_ODOO + " INTEGER," +
+    this.NAME + " TEXT," +
+    this.URL + " TEXT," +
+    this.IMAGE + " TEXT)";
+
+  public DELETE: string =
+    "DROP TABLE IF EXISTS " + this.TABLE_NAME;
 
   public SELECT_ONE = "SELECT * FROM " + this.TABLE_NAME + " WHERE " + this.ID_ODOO + " = ? LIMIT 1 ";
 
   public SELECT_ALL = "SELECT * FROM " + this.TABLE_NAME;
 
 }
+
+
 
 @Injectable()
 class GeneralEntry {
@@ -168,7 +133,85 @@ class GeneralEntry {
 
   public DELETE =
     "DROP TABLE IF EXISTS " + this.TABLE_NAME;
+
+  public SELECT_ONE = "SELECT * FROM " + this.TABLE_NAME + " WHERE " + this.ID_ODOO + " = ? LIMIT 1 ";
+
+  public SELECT_ALL = "SELECT * FROM " + this.TABLE_NAME;
 }
+
+
+@Injectable()
+class FavoritosEntry {
+  public TABLE_NAME: string = "favoritos";
+  public ID: string = "id";
+  public FK: string = "fk";
+  public NAME: string = "name";
+  public SECCION: string = "seccion";
+  public IMAGENES: string = "imagenes";
+  public CREATE: string =
+    "CREATE TABLE IF NOT EXISTS " + this.TABLE_NAME +
+    " (" +
+    this.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+    this.FK + " INTEGER, " +
+    this.SECCION + " TEXT, " +
+    this.IMAGENES + " TEXT, " +
+    this.NAME + " TEXT" +
+    ")";
+
+  public DELETE: string = "DROP TABLE IF EXISTS " + this.TABLE_NAME;
+};
+
+
+@Injectable()
+class RutasEntry {
+  public TABLE_NAME: string = "rutas";
+
+  public ID: string = "id";
+  public ID_ODOO: string = "id_odoo";
+  public NAME: string = "name";
+  public AUDIO: string = "audio";
+  public DESCRIPTION: string = "description";
+  public SCORE: string = "score";
+  public DISTANCIA: string = "distancia";
+  public DURACION: string = "duracion";
+  public RUTA: string = "ruta";
+  public ES_GRATIS: string = "es_gratis";
+  public IMAGENES: string = "imagenes";
+  public RUTAS_IDS: string = "rutas_ids";
+  public LUGARES_IDS: string = "lugares_ids";
+  public AUDIO_NAME: string = "audio_name";
+  public CALIFICADO: string = "calificado";
+  public WRITE_DATE: string = "write_date";
+
+  public CREATE: string =
+    "CREATE TABLE IF NOT EXISTS " + this.TABLE_NAME + " (" +
+    this.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+    this.ID_ODOO + " INTEGER, " +
+    this.NAME + " TEXT, " +
+    this.DESCRIPTION + " TEXT, " +
+    this.SCORE + " INTEGER, " +
+    this.DISTANCIA + " TEXT, " +
+    this.DURACION + " TEXT, " +
+    this.RUTA + " TEXT, " +
+    this.ES_GRATIS + " INTEGER, " +
+    this.CALIFICADO + " INTEGER DEFAULT 0, " +
+    this.IMAGENES + " TEXT, " +
+    this.RUTAS_IDS + " TEXT, " +
+    this.AUDIO_NAME + " TEXT, " +
+    this.AUDIO + " TEXT, " +
+    this.WRITE_DATE + " TEXT, " +
+    this.LUGARES_IDS + " TEXT)";
+
+  public DELETE: string =
+    "DROP TABLE IF EXISTS " + this.TABLE_NAME;
+
+  public SELECT_ONE = "SELECT * FROM " + this.TABLE_NAME + " WHERE " + this.ID_ODOO + " = ? LIMIT 1 ";
+
+  public SELECT_ALL = "SELECT * FROM " + this.TABLE_NAME;
+
+}
+
+
 
 @Injectable()
 class EstacionesEntry {
@@ -205,6 +248,11 @@ class EstacionesEntry {
 
   public DELETE =
     "DROP TABLE IF EXISTS " + this.TABLE_NAME;
+
+  public SELECT_ONE = "SELECT * FROM " + this.TABLE_NAME + " WHERE " + this.ID_ODOO + " = ? LIMIT 1 ";
+
+  public SELECT_ALL = "SELECT * FROM " + this.TABLE_NAME;
+
 }
 
 @Injectable()
@@ -277,27 +325,6 @@ class TipoEntry {
     "DROP TABLE IF EXISTS " + this.TABLE_NAME;
 }
 
-@Injectable()
-class CitysEntry {
-  public TABLE_NAME = "citys";
-
-  public ID: string = "id";
-  public ID_ODOO: string = "id_odoo";
-  public IMAGE: string = "image";
-  public NAME: string = "name";
-  public PLAY_STORE: string = "play_store";
-
-  public CREATE: string =
-    "CREATE TABLE IF NOT EXISTS " + this.TABLE_NAME + " (" +
-    this.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-    this.ID_ODOO + " INTEGER," +
-    this.NAME + " TEXT," +
-    this.PLAY_STORE + " TEXT," +
-    this.IMAGE + " TEXT)";
-
-  public DELETE: string =
-    "DROP TABLE IF EXISTS " + this.TABLE_NAME;
-}
 
 @Injectable()
 class LogFileEnty {

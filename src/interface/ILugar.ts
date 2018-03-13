@@ -10,10 +10,10 @@ export interface ILugar {
   latitud: number;
   longitud: number;
   tipo: string;
-  comer: number;
-  dormir: number;
-  interes: number;
-  es_gratis: number;
+  comer: string;
+  dormir: string;
+  interes: string;
+  es_gratis: string;
   imagenes: string;
   rutas: string;
   lugares: string;

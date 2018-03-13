@@ -13,7 +13,7 @@ export class MenuPage {
   // A reference to the ion-nav in our component
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = 'ContentPage';
+  rootPage: any = 'MainPage';
 
   pages: Array<Page> = new Array();
 
@@ -27,7 +27,7 @@ export class MenuPage {
   }
 
   openPage(page: Page) {
-    // Reset the content nav to have just this page
+    // Reset the main nav to have just this page
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
   }

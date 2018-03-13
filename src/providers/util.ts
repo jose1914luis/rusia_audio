@@ -3,28 +3,47 @@ import {ActionSheetController, AlertController, LoadingController, Platform, Toa
 import {Page} from "../models/pages";
 import {LugaresBo} from "../models/LugaresBo";
 import {APP_CONFIG} from "../../constants";
-
+import {InAppBrowser} from '@ionic-native/in-app-browser';
 
 @Injectable()
 export class UtilTool {
 
+  public static progressBar: EventEmitter<{ progress: number, label: string }> = new EventEmitter();
+  public static closetSplashScreen: EventEmitter<boolean> = new EventEmitter();
+
+  public Apartados = {
+    informacion: "informacion",
+    curiosidad: "curiosidad",
+    curiosidad_metro: "curiosidad_metro",
+    esquema: "esquema",
+    historia: "historia"
+  };
+
+  public Keys = {
+    lastSync: "lastSync"
+  };
 
   public static pages: Array<Page> = [
-    {title: 'Mapa', component: 'MapaPage', icon: 'icon_map.png'},
-    {title: 'Rutas', component: 'LugaresPage', icon: 'icon_route.png'},
-    {title: 'Lugares de interes', component: 'LugaresPage', icon: 'icon_place.png'},
-    {title: 'Donde comer', component: 'LugaresPage', icon: 'icon_foot.png'},
-    {title: 'Donde dormir', component: 'LugaresPage', icon: 'icon_sleep.png'},
-    {title: 'Otros lugares', component: 'LugaresPage', icon: 'icon_place.png'},
-    {title: 'Mis favoritos', component: 'LugaresPage', icon: 'icon_star.png'},
-    {title: 'Información util', component: 'LugaresPage', icon: 'icon_info.png'},
-    {title: 'Curiosidades', component: 'LugaresPage', icon: 'ic_curiosidad.png'},
-    {title: 'Historia del metro', component: 'LugaresPage', icon: 'ic_historia.png'},
-    {title: 'Esquema del metro', component: 'LugaresPage', icon: 'ic_esquema.png'},
-    {title: 'Estaciones del metro', component: 'LugaresPage', icon: 'ic_estaciones.png'},
-    {title: 'Curiosidades del metro', component: 'LugaresPage', icon: 'ic_curiosidad_metro.png'},
-    {title: 'Configuración', component: 'SettingsPage', icon: 'icon_settings.png'},
-    {title: 'Otras ciudades', component: 'LugaresPage', icon: 'icon_city.png'}
+    {title: 'Mapa', component: 'MapaPage', icon: 'icon_map.png', params: {}},
+    {title: 'Rutas', component: 'PlacesPage', icon: 'icon_route.png', params: {tipo: 'routes'}},
+    {title: 'Lugares de interes', component: 'PlacesPage', icon: 'icon_place.png', params: {tipo: 'interes'}},
+    {title: 'Donde comer', component: 'PlacesPage', icon: 'icon_foot.png', params: {tipo: 'comer'}},
+    {title: 'Donde dormir', component: 'PlacesPage', icon: 'icon_sleep.png', params: {tipo: 'dormir'}},
+    {title: 'Otros places', component: 'PlacesPage', icon: 'icon_place.png', params: {tipo: 'otros'}},
+    {title: 'Mis favoritos', component: 'PlacesPage', icon: 'icon_star.png', params: {tipo: 'favoritos'}},
+    {title: 'Información util', component: 'GeneralPage', icon: 'icon_info.png', params: {tipo: 'informacion'}},
+    {title: 'Curiosidades', component: 'GeneralPage', icon: 'ic_curiosidad.png', params: {tipo: 'curiosidad'}},
+    {title: 'Historia del metro', component: 'GeneralPage', icon: 'ic_historia.png', params: {tipo: 'historia'}},
+    {title: 'Esquema del metro', component: 'EsquemaMetroPage', icon: 'ic_esquema.png', params: {}},
+    {title: 'Estaciones del metro', component: 'GeneralPage', icon: 'ic_estaciones.png', params: {}},
+    {
+      title: 'Curiosidades del metro',
+      component: 'GeneralPage',
+      icon: 'ic_curiosidad_metro.png',
+      params: {tipo: 'curiosidad_metro'}
+    },
+    {title: 'Configuración', component: 'SettingsPage', icon: 'icon_settings.png', params: {}},
+    {title: 'Otras ciudades', component: 'CiudadesPage', icon: 'icon_city.png', params: {}}
   ];
 
   public loading: any;
@@ -36,11 +55,20 @@ export class UtilTool {
               public alertCtrl: AlertController,
               public platform: Platform,
               public toastCtrl: ToastController,
-              public actionSheetCtrl: ActionSheetController) {
+              public actionSheetCtrl: ActionSheetController,
+              public iab: InAppBrowser) {
 
 
   }
 
+
+  public padLeft(str: string, max: number, pad: string): string {
+    return str.length < max ? this.padLeft(pad + str, max, pad) : str;
+  }
+
+  public launch(url) {
+    const browser = this.iab.create(url, '_system', 'location=no,clearcache=yes,clearsessioncache=yes');
+  }
 
   public getListIds(map): string {
     let ids: string = "";

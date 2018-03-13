@@ -1,0 +1,18 @@
+page-ciudades .item-md ion-avatar ion-img, page-ciudades .item-md ion-avatar img {
+  border-radius: 0%;
+  height: 120px !important;
+  width: 100%; }
+page-ciudades .card > div > .item {
+  background: #424242; }
+page-ciudades .label-md {
+  margin: 0px; }
+page-ciudades .card h2 {
+  color: #f4f4f4;
+  font-weight: bold; }
+page-ciudades .card p {
+  color: #d3d3d3; }
+page-ciudades .card-footer {
+  background: #000000;
+  opacity: 0.8; }
+
+/*# sourceMappingURL=ciudades.css.map */

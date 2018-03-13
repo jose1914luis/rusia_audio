@@ -1,0 +1,18 @@
+page-places .item-md ion-avatar ion-img, page-places .item-md ion-avatar img {
+  border-radius: 0%;
+  height: 120px !important;
+  width: 100%; }
+page-places .card > div > .item {
+  background: #424242; }
+page-places .label-md {
+  margin: 0px; }
+page-places .card h2 {
+  color: #f4f4f4;
+  font-weight: bold; }
+page-places .card p {
+  color: #d3d3d3; }
+page-places .card-footer {
+  background: #000000;
+  opacity: 0.8; }
+
+/*# sourceMappingURL=places.css.map */

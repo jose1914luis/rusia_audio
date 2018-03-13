@@ -1,0 +1,74 @@
+<custom-header title="{{title}}"></custom-header>
+<ion-content no-padding has-header>
+  <ion-card *ngFor="let item of lugaresItems">
+    <div (click)="openItem(item)">
+      <ion-item no-padding no-margin no-lines>
+        <ion-avatar>
+          <img [src]="domSanitizationService.bypassSecurityTrustUrl(item.images_bo[0].image)"
+               *ngIf="item.images_bo && item.images_bo.length > 0">
+        </ion-avatar>
+        <h2>{{item.name}}</h2>
+        <p>{{item.tipo}}</p>
+      </ion-item>
+
+      <!--<ion-card-main>-->
+      <!--<p>{{item.descripcion}}</p>-->
+      <!--</ion-card-main>-->
+    </div>
+
+    <ion-row class="card-footer">
+      <ion-col>
+        <button ion-button color="light" clear small icon-start>
+          <!--<ion-icon name='thumbs-up'></ion-icon>-->
+          <img src="assets/img/icon_liked.png"/>&nbsp;&nbsp;
+          {{item.score}}
+        </button>
+      </ion-col>
+      <ion-col>
+        <button ion-button color="light" clear small icon-start>
+          <img src="assets/img/icon_distance.png"/>&nbsp;&nbsp;
+          {{item.display_distance}}
+        </button>
+      </ion-col>
+      <ion-col *ngIf="item.tipo !== 'place'">
+        <button ion-button color="light" clear small icon-start>
+          <img src="assets/img/icon_time.png"/>&nbsp;&nbsp;
+          <!--{{item.descripcion}}-->
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+
+
+  <ion-infinite-scroll (ionInfinite)="getDataScroll($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Loading more data...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>
+
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <button ion-button clear text-center>
+            <ion-icon name='star' icon-medium></ion-icon>
+          </button>
+        </ion-col>
+        <ion-col>
+          <button ion-button clear text-center>
+            <i class="icon icon-sort-alphabetical" icon-medium></i>
+          </button>
+        </ion-col>
+        <ion-col>
+          <button ion-button clear text-center>
+            <img src="assets/img/icon_time.png"/>
+          </button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>

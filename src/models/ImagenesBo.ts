@@ -73,16 +73,16 @@ export class ImagenesBo {
     });
   }
 
-  exist(id_odoo: string): Promise<boolean> {
+  exist(id_odoo: string): Promise<ImagenesBo> {
     return new Promise((resolve, reject) => {
       AudioguiaSQLiteHelper.db.executeSql(new ImagenesEntry().EXIST, [id_odoo])
         .then((data) => {
           console.log('Executed SQL ImagenesBo exist');
           console.log(data);
           if (data.rows.item(0))
-            resolve(true);
+            resolve(new ImagenesBo(data.rows.item(0)));
           else
-            resolve(false);
+            resolve(new ImagenesBo());
         })
         .catch(ex => {
           console.log(ex);
@@ -111,48 +111,4 @@ export class ImagenesBo {
     });
   }
 
-
-  /*  public long save(){
-      ContentValues values = new ContentValues();
-      SQLiteDatabase db = helper.getWritableDatabase();
-      values.put(AudioguiaData.ImagenesEntry.ID_ODOO, this.id);
-      values.put(AudioguiaData.ImagenesEntry.IMAGE, this.image);
-      long result = 0;
-      if(exist(this.id, db))
-        result = db.update(AudioguiaData.ImagenesEntry.TABLE_NAME, values, "id_odoo = " + this.id, null);
-      else
-        result = db.insert(AudioguiaData.ImagenesEntry.TABLE_NAME, null,values);
-      db.close();
-      return result;
-    }*/
-
-  /*
-  public static number lastId(SQLiteDatabase db){
-      string query = "select id_odoo from imagenes order by id_odoo desc limit 1";
-      Cursor c = db.rawQuery(query, null);
-      number result = 0;
-      if(c.moveToFirst())
-          result = c.getnumber(c.getColumnIndex(AudioguiaData.ImagenesEntry.ID_ODOO));
-      c.close();
-      return result;
-  }
-
-
-
-
-
-
-  public static Stack<ImagenesBo> all(SQLiteDatabase db){
-      Stack<ImagenesBo> items = new Stack<>();
-      string query = "select id_odoo from imagenes where image is null";
-      Cursor c = db.rawQuery(query, null);
-      while(c.moveToNext()){
-          ImagenesBo item = new ImagenesBo();
-          item.setId(c.getnumber(c.getColumnIndex(AudioguiaData.ImagenesEntry.ID_ODOO)));
-          items.push(item);
-      }
-      c.close();
-      return items;
-  }
-  */
 }

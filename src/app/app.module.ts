@@ -11,6 +11,8 @@ import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
 
+
+import {InAppBrowser} from '@ionic-native/in-app-browser';
 import {Geolocation} from '@ionic-native/geolocation';
 import {AgmCoreModule} from '@agm/core';
 
@@ -90,6 +92,7 @@ export function provideSettings(storage: Storage) {
     Services,
     UtilTool,
     Geolocation,
+    InAppBrowser,
     SQLite,
     SQLitePorter,
     AudioguiaSQLiteHelper,
