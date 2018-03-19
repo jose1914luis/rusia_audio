@@ -47,10 +47,10 @@ class LugaresEntry {
     this.LATITUD + " REAL, " +
     this.lONGITUD + " REAL, " +
     this.TIPO + " TEXT, " +
-    this.COMER + " INTEGER, " +
-    this.DORMIR + " INTEGER, " +
-    this.INTERES + " INTEGER, " +
-    this.ES_GRATIS + " INTEGER, " +
+    this.COMER + " TEXT, " +
+    this.DORMIR + " TEXT, " +
+    this.INTERES + " TEXT, " +
+    this.ES_GRATIS + " TEXT, " +
     this.CALIFICADO + " INTEGER DEFAULT 0, " +
     this.IMAGENES + " TEXT, " +
     this.RUTAS_IDS + " TEXT, " +
@@ -102,7 +102,6 @@ class CitysEntry {
   public SELECT_ALL = "SELECT * FROM " + this.TABLE_NAME;
 
 }
-
 
 
 @Injectable()
@@ -210,7 +209,6 @@ class RutasEntry {
   public SELECT_ALL = "SELECT * FROM " + this.TABLE_NAME;
 
 }
-
 
 
 @Injectable()

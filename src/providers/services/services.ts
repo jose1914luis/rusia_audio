@@ -108,10 +108,36 @@ export class Services {
           });
 
 
-          await this.addIdsImages(item.imagenes).then(() => {
-          }).catch(() => {
-          });
+          /*     await this.addIdsImages(item.imagenes).then(() => {
+               }).catch(() => {
+               });*/
         }
+
+        /*
+         let images: Array<any> = new Array();
+         newArray.map((value) => {
+           if (value.imagenes) {
+             value.imagenes.split(',').map(img => {
+               if (img)
+                 images.push(img);
+               // images.push(['id', '=', img]);
+             });
+           }
+         });
+         updateArray.map((value) => {
+           if (value.imagenes) {
+             value.imagenes.split(',').map(img => {
+               if (img)
+                 images.push(img);
+               // images.push(['id', '=', img]);
+             });
+           }
+         });
+
+         await this.addImages(images).then(() => {
+         }).catch(() => {
+         });
+        */
 
         await LugaresBo.saveAllJson(newArray, updateArray).then(success => {
           resolve(true);
@@ -175,11 +201,36 @@ export class Services {
           }).catch(() => {
           });
 
-
+          /*
           await this.addIdsImages(item.imagenes).then(() => {
           }).catch(() => {
-          });
+          });*/
         }
+
+        /*
+         let images: Array<any> = new Array();
+            newArray.map((value) => {
+              if (value.imagenes) {
+                value.imagenes.split(',').map(img => {
+                  if (img)
+                    images.push(img);
+                  // images.push(['id', '=', img]);
+                });
+              }
+            });
+            updateArray.map((value) => {
+              if (value.imagenes) {
+                value.imagenes.split(',').map(img => {
+                  if (img)
+                    images.push(img);
+                  // images.push(['id', '=', img]);
+                });
+              }
+            });
+            await this.addImages(images).then(() => {
+            }).catch(() => {
+            });
+          */
 
         await RutasBo.saveAllJson(newArray, updateArray).then(success => {
           resolve(true);
@@ -217,12 +268,14 @@ export class Services {
 
         for (var data of value) {
           item = new CityBo(data);
+          const img = self.domSanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + item.image);
+          console.log(img);
           const objCity: ICity = {
             id: 0,
             id_odoo: item.id,
             name: item.name,
             url: item.url,
-            image: item.image
+            image: img['changingThisBreaksApplicationSecurity']
           };
           await CityBo.exist(item.id_odoo).then(exist => {
             if (exist) {
@@ -234,6 +287,7 @@ export class Services {
           }).catch(() => {
           });
         }
+
 
         await CityBo.saveAllJson(newArray, updateArray).then(success => {
           resolve(true);
@@ -261,7 +315,6 @@ export class Services {
       const defaultQuery = [['id', '>', lastId], ['city_id', '=', APP_CONFIG.CITY_ID]];
       self.odoo.search_read('audioguia.estaciones', defaultQuery, fields).then(async value => {
         console.log(value);
-
 
         let newArray: Array<IEstacion> = new Array();
         let updateArray: Array<IEstacion> = new Array();
@@ -291,10 +344,35 @@ export class Services {
           }).catch(() => {
           });
 
-          await this.addIdsImages(item.imagenes).then(() => {
-          }).catch(() => {
-          });
+          /*    await this.addIdsImages(item.imagenes).then(() => {
+              }).catch(() => {
+              });*/
         }
+
+        /*
+        let images: Array<any> = new Array();
+        newArray.map((value) => {
+          if (value.imagenes) {
+            value.imagenes.split(',').map(img => {
+              if (img)
+                images.push(img);
+              // images.push(['id', '=', img]);
+            });
+          }
+        });
+        updateArray.map((value) => {
+          if (value.imagenes) {
+            value.imagenes.split(',').map(img => {
+              if (img)
+                images.push(img);
+              // images.push(['id', '=', img]);
+            });
+          }
+        });
+        await this.addImages(images).then(() => {
+        }).catch(() => {
+        });
+        */
 
         await EstacionesBo.saveAllJson(newArray, updateArray).then(success => {
           resolve(true);
@@ -350,10 +428,37 @@ export class Services {
           }).catch(() => {
           });
 
-          await this.addIdsImages(item.imagenes).then(() => {
-          }).catch(() => {
-          });
+          /*
+            await this.addIdsImages(item.imagenes).then(() => {
+             }).catch(() => {
+             });
+          */
         }
+
+        /*
+        let images: Array<any> = new Array();
+        newArray.map((value) => {
+          if (value.imagenes) {
+            value.imagenes.split(',').map(img => {
+              if (img)
+                images.push(img);
+              // images.push(['id', '=', img]);
+            });
+          }
+        });
+        updateArray.map((value) => {
+          if (value.imagenes) {
+            value.imagenes.split(',').map(img => {
+              if (img)
+                images.push(img);
+              // images.push(['id', '=', img]);
+            });
+          }
+        });
+        await this.addImages(images).then(() => {
+        }).catch(() => {
+        });
+        */
 
         await GeneralBo.saveAllJson(newArray, updateArray).then(success => {
           resolve(true);
@@ -399,7 +504,7 @@ export class Services {
           }
         }
         resolve();
-      }else{
+      } else {
         reject();
       }
     });
@@ -414,7 +519,11 @@ export class Services {
       self.odoo = this.odoo;
       const fields = ["image"];
       const defaultQuery = [['id', '=', id]];
-      self.odoo.search_read('audioguia.imagenes', defaultQuery, fields).then(value => {
+      self.odoo.search_read('audioguia.imagenes', defaultQuery, fields).then(async value => {
+
+        if (value) {
+
+        }
         if (value[0]) {
           const img = self.domSanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + value[0].image);
           console.log(img);
@@ -433,6 +542,153 @@ export class Services {
     });
   }
 
+
+  /*
+    async addImages(where: Array<any>) {
+      return new Promise(async (resolve, reject) => {
+        console.log('where');
+        console.log(where);
+        if (where.length === 0) {
+          reject({status: 500, message: 'Error consultando array imagen '});
+        }
+        for (var conditional of where) {
+          let self = this;
+          self.odoo = this.odoo;
+          const fields = ["image"];
+          const defaultQuery = [conditional];
+          console.log('defaultQuery');
+          console.log(defaultQuery);
+          await self.odoo.search_read('audioguia.imagenes', defaultQuery, fields).then(async value => {
+            let data = value[0];
+
+            const img = self.domSanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + data.image);
+            console.log(img);
+            let imagen: ImagenesBo = new ImagenesBo({
+              id: data.id,
+              id_odoo: data.id,
+              image: img['changingThisBreaksApplicationSecurity']
+            });
+
+            let im = new ImagenesBo();
+            await im.exist(data.id).then(async exist => {
+              if (!exist.id_odoo) {
+                await new ImagenesBo().insert(data.id, imagen.image).then().catch();
+              }
+              else {
+                await new ImagenesBo().update(imagen).then().catch();
+              }
+            }).catch(ex => {
+            });
+
+          }).catch(ex => {
+              reject({status: 500, message: ex || 'Error consultando array imagen '});
+            }
+          );
+        }
+
+        resolve(true);
+      });
+
+    }
+  */
+
+  /*
+    addImages(where: Array<any>): Promise<boolean> {
+      return new Promise((resolve, reject) => {
+        console.log('where');
+        console.log(where);
+        if (where.length === 0) {
+          reject({status: 500, message: 'Error consultando array imagen '});
+        }
+
+        let self = this;
+        self.odoo = this.odoo;
+        const fields = ["image"];
+        const defaultQuery = [where];
+        console.log('defaultQuery');
+        console.log(defaultQuery);
+        self.odoo.search_read('audioguia.imagenes', defaultQuery, fields).then(value => {
+
+          for (var data of value) {
+            const img = self.domSanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + data.image);
+            console.log(img);
+            let imagen: ImagenesBo = new ImagenesBo({
+              id: data.id,
+              id_odoo: data.id,
+              image: img['changingThisBreaksApplicationSecurity']
+            });
+
+            let im = new ImagenesBo();
+            im.exist(data.id).then(async exist => {
+              if (!exist.id_odoo) {
+                await new ImagenesBo().insert(data.id, imagen.image).then().catch();
+              }
+              else {
+                await new ImagenesBo().update(imagen).then().catch();
+              }
+            }).catch(ex => {
+            });
+          }
+
+          resolve(true);
+
+        }).catch(ex => {
+            reject({status: 500, message: ex || 'Error consultando array imagen '});
+          }
+        );
+
+      });
+
+    }
+    */
+
+  addImages(where: Array<any>): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      console.log('where');
+      console.log(where);
+      if (where.length === 0) {
+        reject({status: 500, message: 'Error consultando array imagen '});
+      }
+
+      let self = this;
+      self.odoo = this.odoo;
+      const fields = ["image"];
+      const defaultQuery = where;
+      console.log('defaultQuery');
+      console.log(defaultQuery);
+      console.log('ide');
+      console.log(where);
+      self.odoo.search_read('audioguia.imagenes', [['id', 'in', where]], fields).then(value => {
+
+        for (var data of value) {
+          const img = self.domSanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + data.image);
+          console.log(img);
+          let imagen: ImagenesBo = new ImagenesBo({
+            id: data.id,
+            id_odoo: data.id,
+            image: img['changingThisBreaksApplicationSecurity']
+          });
+
+          imagen.exist(data.id).then(async exist => {
+            if (!exist.id_odoo)
+              await new ImagenesBo().insert(data.id).then().catch();
+
+            await new ImagenesBo().update(imagen).then().catch();
+
+          }).catch(ex => {
+          });
+        }
+
+        resolve(true);
+
+      }).catch(ex => {
+          reject({status: 500, message: ex || 'Error consultando array imagen '});
+        }
+      );
+
+    });
+
+  }
 
   public getLastIdByTableName(tableName: string, where: string): Promise<string> {
     return new Promise((resolve, reject) => {

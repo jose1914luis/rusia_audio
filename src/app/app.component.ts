@@ -107,10 +107,11 @@ export class MyApp {
     console.log("FrecuenciaSincronizacion");
     console.log(5);
 
-
+/*
     if (horas <= 5)
       return false;
     else
+      */
       return true;
   }
 

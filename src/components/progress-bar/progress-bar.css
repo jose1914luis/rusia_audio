@@ -1,20 +1,16 @@
 progress-bar {
   color: #fff; }
   progress-bar .progress-outer {
-    width: 96%;
-    margin: 10px 2%;
-    padding: 3px;
+    width: 100%;
     text-align: center;
     background-color: #f4f4f4 !important;
     border: 1px solid #dcdcdc !important;
-    color: #fff;
-    border-radius: 20px; }
+    color: #fff; }
   progress-bar .progress-inner {
     min-width: 0% !important;
     white-space: nowrap;
     overflow: hidden;
     padding: 5px;
-    border-radius: 20px;
-    background: theme-colors("mainColors", "secondary") !important; }
+    background: theme-colors("textColors", "secondary") !important; }
 
 /*# sourceMappingURL=progress-bar.css.map */

@@ -92,15 +92,15 @@ export class UtilTool {
   }
 
 
-  public showLoader() {
+  public LoadingShow(msg: string = "Procesando....") {
     this.loading = this.loadingCtrl.create({
-      content: 'Procesando....'
+      content: msg
     });
 
     this.loading.present();
   }
 
-  public hideLoader() {
+  public LoadingHide() {
     this.loading.dismiss().catch(() => {
     });
   }

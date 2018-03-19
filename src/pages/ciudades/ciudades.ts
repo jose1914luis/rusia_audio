@@ -27,7 +27,6 @@ export class CiudadesPage {
 
     console.log('entro');
 
-    // this.services.login();
     this.audioguiaSQLiteHelper.initDb().then(() => {
       this.cargarCiudades().then(() => {
       }).catch(() => {
@@ -56,11 +55,8 @@ export class CiudadesPage {
 
   async cargarCiudades() {
     await new CityBo().get(this.page).then(async data => {
-        debugger;
         for (let city of data) {
-          let obj: CityBo = city;
-          obj.image  = 'data:image/jpeg;base64,' + obj.image;
-          this.items.push(obj);
+          this.items.push(city);
         }
       }
     ).catch(e => {

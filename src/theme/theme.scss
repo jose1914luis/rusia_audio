@@ -228,6 +228,10 @@ $icon-size: (
   }
 }
 
+[text-bold] {
+  font-weight: bold !important;
+}
+
 // Span Settings
 [span-small] {
   color: theme-colors('mainColors', 'secondary');
@@ -542,10 +546,9 @@ ion-app.md {
   }
 }
 
-ion-footer > .toolbar{
+ion-footer > .toolbar {
   height: 30px !important;
 }
-
 
 // Alert message
 

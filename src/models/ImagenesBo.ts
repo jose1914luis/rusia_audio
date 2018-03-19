@@ -77,7 +77,7 @@ export class ImagenesBo {
     return new Promise((resolve, reject) => {
       AudioguiaSQLiteHelper.db.executeSql(new ImagenesEntry().EXIST, [id_odoo])
         .then((data) => {
-          console.log('Executed SQL ImagenesBo exist');
+          console.log('Executed SQL ImagenesBo exist ' + id_odoo);
           console.log(data);
           if (data.rows.item(0))
             resolve(new ImagenesBo(data.rows.item(0)));

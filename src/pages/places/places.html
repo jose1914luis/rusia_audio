@@ -1,43 +1,76 @@
 <custom-header title="{{title}}"></custom-header>
 <ion-content no-padding has-header>
-  <ion-card *ngFor="let item of lugaresItems">
-    <div (click)="openItem(item)">
-      <ion-item no-padding no-margin no-lines>
-        <ion-avatar>
-          <img [src]="domSanitizationService.bypassSecurityTrustUrl(item.images_bo[0].image)"
-               *ngIf="item.images_bo && item.images_bo.length > 0">
-        </ion-avatar>
-        <h2>{{item.name}}</h2>
-        <p>{{item.tipo}}</p>
-      </ion-item>
 
-      <!--<ion-card-main>-->
-      <!--<p>{{item.descripcion}}</p>-->
-      <!--</ion-card-main>-->
-    </div>
+  <!--lugares-->
+  <div *ngIf="tipo !== 'routes'">
+    <ion-card *ngFor="let item of lugaresItems">
+      <div (click)="openItem(item)">
+        <ion-item no-padding no-margin no-lines>
+          <ion-avatar>
+            <img [src]="domSanitizationService.bypassSecurityTrustUrl(item.images_bo[0].image)"
+                 *ngIf="item.images_bo && item.images_bo.length > 0">
+          </ion-avatar>
+          <h2>{{item.name}}</h2>
+          <p>{{item.tipo}}</p>
+        </ion-item>
+      </div>
 
-    <ion-row class="card-footer">
-      <ion-col>
-        <button ion-button color="light" clear small icon-start>
-          <!--<ion-icon name='thumbs-up'></ion-icon>-->
-          <img src="assets/img/icon_liked.png"/>&nbsp;&nbsp;
-          {{item.score}}
-        </button>
-      </ion-col>
-      <ion-col>
-        <button ion-button color="light" clear small icon-start>
-          <img src="assets/img/icon_distance.png"/>&nbsp;&nbsp;
-          {{item.display_distance}}
-        </button>
-      </ion-col>
-      <ion-col *ngIf="item.tipo !== 'place'">
-        <button ion-button color="light" clear small icon-start>
-          <img src="assets/img/icon_time.png"/>&nbsp;&nbsp;
-          <!--{{item.descripcion}}-->
-        </button>
-      </ion-col>
-    </ion-row>
-  </ion-card>
+      <ion-row class="card-footer">
+        <ion-col>
+          <button ion-button color="light" clear small icon-start>
+            <img src="assets/img/icon_liked.png"/>&nbsp;&nbsp;
+            {{item.score}}
+          </button>
+        </ion-col>
+        <ion-col>
+          <button ion-button color="light" clear small icon-start>
+            <img src="assets/img/icon_distance.png"/>&nbsp;&nbsp;
+            {{item.display_distance}}
+          </button>
+        </ion-col>
+        <ion-col *ngIf="item.tipo !== 'place'">
+          <button ion-button color="light" clear small icon-start>
+            <img src="assets/img/icon_time.png"/>&nbsp;&nbsp;
+          </button>
+        </ion-col>
+      </ion-row>
+    </ion-card>
+  </div>
+
+
+  <!--routes-->
+  <div *ngIf="tipo === 'routes'">
+    <ion-card *ngFor="let item of rutasItems">
+      <div (click)="openItem(item)">
+        <ion-item no-padding no-margin no-lines>
+          <ion-avatar>
+            <img [src]="domSanitizationService.bypassSecurityTrustUrl(item.images_bo[0].image)"
+                 *ngIf="item.images_bo && item.images_bo.length > 0">
+          </ion-avatar>
+          <h2>{{item.name}}</h2>
+        </ion-item>
+      </div>
+
+      <ion-row class="card-footer">
+        <ion-col>
+          <button ion-button color="light" clear small icon-start>
+            <img src="assets/img/icon_liked.png"/>&nbsp;&nbsp;
+            {{item.score}}
+          </button>
+        </ion-col>
+        <ion-col>
+          <button ion-button color="light" clear small icon-start>
+            <img src="assets/img/icon_distance.png"/>&nbsp;&nbsp;
+          </button>
+        </ion-col>
+        <ion-col>
+          <button ion-button color="light" clear small icon-start>
+            <img src="assets/img/icon_time.png"/>&nbsp;&nbsp;
+          </button>
+        </ion-col>
+      </ion-row>
+    </ion-card>
+  </div>
 
 
   <ion-infinite-scroll (ionInfinite)="getDataScroll($event)">

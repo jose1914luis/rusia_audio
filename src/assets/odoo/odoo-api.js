@@ -51,10 +51,10 @@ function OdooApi(host, proxy, db) {
   };
 
 
-  this.search_read = function (model, domain, fields, offset, limit, order) {
+  this.search_read = function (model, domain, fields, offset, limit, order)  {
     var odoo_api = this;
 
-    var promise = new Promise(function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
       $.xmlrpc({
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -79,8 +79,6 @@ function OdooApi(host, proxy, db) {
         }
       });
     });
-
-    return promise;
   };
 
   this.search = function (model, domain) {

@@ -1,8 +1,8 @@
 import {AudioguiaSQLiteHelper} from "../database/AudioguiaSQLiteHelper";
 import {LugaresEntry} from "../database/AudioguiaData";
 import {ILugar} from "../interface/ILugar";
-import {APP_CONFIG} from "../../constants";
 import {ImagenesBo} from "./ImagenesBo";
+import {APP_CONFIG} from "../../constants";
 
 export class LugaresBo {
   constructor(obj = null) {
@@ -353,10 +353,13 @@ export class LugaresBo {
 
   public get(page: number, where: string = ""): Promise<Array<LugaresBo>> {
     return new Promise((resolve, reject) => {
-
+      console.log(where);
       const lugaresEntry: LugaresEntry = new LugaresEntry();
-      const query = "SELECT * FROM " + lugaresEntry.TABLE_NAME + " " + where + " ORDER BY " + lugaresEntry.NAME + " LIMIT ? OFFSET ? ";
-      AudioguiaSQLiteHelper.db.executeSql(query, [APP_CONFIG.LIMIT_SQL, ( APP_CONFIG.LIMIT_SQL * page)])
+      // const query = "SELECT * FROM " + lugaresEntry.TABLE_NAME + " ORDER BY " + lugaresEntry.NAME + " LIMIT ? OFFSET ? ";
+      const query = "SELECT * FROM " + lugaresEntry.TABLE_NAME + " ORDER BY " + lugaresEntry.NAME;
+
+      // AudioguiaSQLiteHelper.db.executeSql(query, [APP_CONFIG.LIMIT_SQL, ( APP_CONFIG.LIMIT_SQL * page)])
+      AudioguiaSQLiteHelper.db.executeSql(query, [])
         .then((data) => {
           console.log('Executed SQL LugaresBo get');
           let array: Array<LugaresBo> = new Array();
@@ -367,9 +370,19 @@ export class LugaresBo {
               array.push(new LugaresBo(data.rows.item(i)));
             }
           }
+
+          if (where === 'comer')
+            array = array.filter(f => f.comer === 'true');
+          else if (where === 'dormir')
+            array = array.filter(f => f.dormir === 'true');
+          else if (where === 'interes')
+            array = array.filter(f => f.interes === 'true');
+          else if (where === 'otros')
+            array = array.filter(f => f.comer === 'false' && f.dormir === 'false' && f.interes === 'false');
+
           console.log('fin Executed SQL LugaresBo get');
           console.log(array);
-          resolve(array);
+          resolve(array.slice(( APP_CONFIG.LIMIT_SQL * page) - APP_CONFIG.LIMIT_SQL, ( APP_CONFIG.LIMIT_SQL * page)));
         })
         .catch(ex => {
           console.log(ex);

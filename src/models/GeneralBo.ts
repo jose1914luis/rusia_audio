@@ -182,8 +182,9 @@ export class GeneralBo {
   public get(page: number, aparto: string = ""): Promise<Array<GeneralBo>> {
     return new Promise((resolve, reject) => {
       const generalEntry: GeneralEntry = new GeneralEntry();
-      const query = "SELECT * FROM " + generalEntry.TABLE_NAME + " WHERE " + generalEntry.APARTADO + " = ? ORDER BY " + generalEntry.NAME + " LIMIT ? OFFSET ? ";
-      AudioguiaSQLiteHelper.db.executeSql(query, [aparto, APP_CONFIG.LIMIT_SQL, ( APP_CONFIG.LIMIT_SQL * page)])
+      const query = "SELECT * FROM " + generalEntry.TABLE_NAME; //+ " ORDER BY " + generalEntry.NAME + " LIMIT ? OFFSET ? ";
+      AudioguiaSQLiteHelper.db.executeSql(query, [])
+     // AudioguiaSQLiteHelper.db.executeSql(query, [APP_CONFIG.LIMIT_SQL, ( APP_CONFIG.LIMIT_SQL * page)])
         .then((data) => {
           console.log('Executed SQL GeneralBo get');
           let array: Array<GeneralBo> = new Array();
@@ -194,6 +195,7 @@ export class GeneralBo {
               array.push(new GeneralBo(data.rows.item(i)));
             }
           }
+          array = array.filter(f => f.apartado === aparto);
           console.log('fin Executed SQL GeneralBo get');
           console.log(array);
           resolve(array);

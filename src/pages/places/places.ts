@@ -8,6 +8,7 @@ import {AudioguiaSQLiteHelper} from "../../database/AudioguiaSQLiteHelper";
 import {DomSanitizer} from "@angular/platform-browser";
 import {Geolocation} from '@ionic-native/geolocation';
 import {LugaresEntry} from "../../database/AudioguiaData";
+import {RutasBo} from "../../models/RutasBo";
 
 @IonicPage()
 @Component({
@@ -18,6 +19,7 @@ import {LugaresEntry} from "../../database/AudioguiaData";
 export class PlacesPage {
 
   lugaresItems: Array<LugaresBo> = new Array();
+  rutasItems: Array<RutasBo> = new Array();
   page: number = 1;
   title: string = "";
   tipo: string = "";
@@ -27,7 +29,6 @@ export class PlacesPage {
               public util: UtilTool,
               public audioguiaSQLiteHelper: AudioguiaSQLiteHelper,
               public domSanitizationService: DomSanitizer,
-              public lugaresEntry: LugaresEntry,
               public geolocation: Geolocation,
               public services: Services) {
 
@@ -37,7 +38,9 @@ export class PlacesPage {
       this.tipo = this.navParams.get('tipo');
     }
 
-    // this.services.login();
+    this.lugaresItems = new Array();
+    this.rutasItems = new Array();
+
     this.audioguiaSQLiteHelper.initDb().then(() => {
       this.cargarLugares().then(() => {
       }).catch(() => {
@@ -45,6 +48,7 @@ export class PlacesPage {
     }).catch();
 
   }
+
 
   openItem(item: LugaresBo) {
     this.navCtrl.push('PlaceDetailPage', {
@@ -65,27 +69,78 @@ export class PlacesPage {
     });
   }
 
-  getFiltrosLugares(): string {
-    if (this.tipo === 'comer')
-      return  " WHERE " + this.lugaresEntry.COMER + " = 'true' ";
-    else if (this.tipo === 'dormir')
-      return " WHERE " + this.lugaresEntry.DORMIR + " = 'true' ";
-    else if (this.tipo === 'interes')
-      return " WHERE " + this.lugaresEntry.INTERES + " = 'true' ";
-    else if (this.tipo === 'otros')
-      return " WHERE " + this.lugaresEntry.COMER + " = 'false' AND " + this.lugaresEntry.DORMIR + " = 'false' AND " + this.lugaresEntry.INTERES + " = 'false' ";
-    else
-      return "";
-  }
 
   async cargarLugares() {
     if (this.tipo === 'routes') {
+      await new RutasBo().get(this.page).then(async data => {
 
+          this.util.LoadingShow();
+
+          let images: Array<any> = new Array();
+          data.map((value) => {
+            if (value.imagenes) {
+              value.imagenes.split(',').map(img => {
+                if (img)
+                  images.push(img);
+              });
+            }
+          });
+
+          if (images.length > 0) {
+            await this.services.login().then(async () => {
+              await this.services.addImages(images).then().catch();
+            }).catch();
+          }
+
+          for (let lugar of data) {
+            let obj: RutasBo = lugar;
+            if (obj.imagenes) {
+              let img_lugar: Array<ImagenesBo> = new Array();
+              for (let id_image of obj.imagenes.split(',')) {
+                if (id_image) {
+                  await new ImagenesBo().getImageById(id_image).then(images => {
+                    img_lugar.push(images);
+                  }).catch(e => {
+                    console.log('cargarLugares imagenes error ');
+                    console.log(e);
+                  });
+                  obj.images_bo = img_lugar;
+                }
+              }
+            }
+
+            this.rutasItems.push(obj);
+          }
+          this.util.LoadingHide();
+        }
+      ).catch(e => {
+        console.log('cargarLugares error ');
+        console.log(e);
+      });
     } else {
-      await new LugaresBo().get(this.page, this.getFiltrosLugares()).then(async data => {
+      await new LugaresBo().get(this.page, this.tipo).then(async data => {
+
+          this.util.LoadingShow();
+
+          let images: Array<any> = new Array();
+          data.map((value) => {
+            if (value.imagenes) {
+              value.imagenes.split(',').map(img => {
+                if (img)
+                  images.push(img);
+              });
+            }
+          });
+
+          if (images.length > 0) {
+            await this.services.login().then(async () => {
+              await this.services.addImages(images).then().catch();
+            }).catch();
+          }
+
           for (let lugar of data) {
             let obj: LugaresBo = lugar;
-            if (obj.imagenes !== "0") {
+            if (obj.imagenes) {
               let img_lugar: Array<ImagenesBo> = new Array();
               for (let id_image of obj.imagenes.split(',')) {
                 if (id_image) {
@@ -106,6 +161,7 @@ export class PlacesPage {
             });
             this.lugaresItems.push(obj);
           }
+          this.util.LoadingHide();
         }
       ).catch(e => {
         console.log('cargarLugares error ');
@@ -113,6 +169,7 @@ export class PlacesPage {
       });
     }
   }
+
 
   getDistance(lat: number, lon: number): Promise<number> {
     return new Promise((resolve, reject) => {
@@ -127,5 +184,6 @@ export class PlacesPage {
       });
     });
   }
+
 
 }

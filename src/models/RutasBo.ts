@@ -2,6 +2,7 @@ import {IRuta} from "../interface/IRuta";
 import {RutasEntry} from "../database/AudioguiaData";
 import {AudioguiaSQLiteHelper} from "../database/AudioguiaSQLiteHelper";
 import {APP_CONFIG} from "../../constants";
+import {ImagenesBo} from "./ImagenesBo";
 
 export class RutasBo {
   private _id: number;
@@ -20,6 +21,7 @@ export class RutasBo {
   private _imagenes: string;
   private _rutas: string;
   private _lugares: string;
+  private _images_bo: Array<ImagenesBo>;
 
   constructor(obj = null) {
     if (!obj) {
@@ -29,19 +31,20 @@ export class RutasBo {
     this._id = obj.id;
     this._id_odoo = obj.id_odoo;
     this._name = obj.name;
-    this._audio_name = obj.name;
-    this._descripcion = obj.name;
-    this._score = obj.name;
-    this._distancia = obj.name;
-    this._duracion = obj.name;
-    this._ruta = obj.name;
-    this._es_gratis = obj.name;
-    this._precio = obj.name;
-    this._calificado = obj.name;
-    this._write_date = obj.name;
-    this._imagenes = obj.name;
-    this._rutas = obj.name;
-    this._lugares = obj.name;
+    this._audio_name = obj.audio_name;
+    this._descripcion = obj.descripcion;
+    this._score = obj.score;
+    this._distancia = obj.distancia;
+    this._duracion = obj.duracion;
+    this._ruta = obj.ruta;
+    this._es_gratis = obj.es_gratis;
+    this._precio = obj.precio;
+    this._calificado = obj.calificado;
+    this._write_date = obj.write_date;
+    this._imagenes = obj.imagenes;
+    this._rutas = obj.rutas;
+    this._lugares = obj.lugares;
+    this._images_bo = new Array();
   }
 
 
@@ -174,6 +177,14 @@ export class RutasBo {
     this._lugares = value;
   }
 
+  get images_bo(): Array<ImagenesBo> {
+    return this._images_bo;
+  }
+
+  set images_bo(value: Array<ImagenesBo>) {
+    this._images_bo = value;
+  }
+
   public static saveAllJson(newData: Array<IRuta>, updateData: Array<IRuta>) {
     console.log(newData);
     console.log(updateData);
@@ -201,7 +212,7 @@ export class RutasBo {
       };
 
       AudioguiaSQLiteHelper.sqlitePorter.importJsonToDb(AudioguiaSQLiteHelper.db, json).then(success => {
-        console.log("success json RutasBo");
+        console.log("success json RutasBo " + success);
         console.log(success);
         resolve(success);
       }).catch((error) => {
@@ -212,12 +223,14 @@ export class RutasBo {
     });
   }
 
-  public get(page: number, where: string = ""): Promise<Array<RutasBo>> {
+  public get(page: number): Promise<Array<RutasBo>> {
     return new Promise((resolve, reject) => {
 
       const rutasEntry: RutasEntry = new RutasEntry();
-      const query = "SELECT * FROM " + rutasEntry.TABLE_NAME + " " + where + " ORDER BY " + rutasEntry.NAME + " LIMIT ? OFFSET ? ";
-      AudioguiaSQLiteHelper.db.executeSql(query, [APP_CONFIG.LIMIT_SQL, ( APP_CONFIG.LIMIT_SQL * page)])
+      // const query = "SELECT * FROM " + rutasEntry.TABLE_NAME + " ORDER BY " + rutasEntry.NAME + " LIMIT ? OFFSET ? ";
+      const query = "SELECT * FROM " + rutasEntry.TABLE_NAME + " ORDER BY " + rutasEntry.NAME;
+      //AudioguiaSQLiteHelper.db.executeSql(query, [APP_CONFIG.LIMIT_SQL, ( APP_CONFIG.LIMIT_SQL * page)])
+      AudioguiaSQLiteHelper.db.executeSql(query, [])
         .then((data) => {
           console.log('Executed SQL RutasBo get');
           let array: Array<RutasBo> = new Array();
@@ -230,7 +243,7 @@ export class RutasBo {
           }
           console.log('fin Executed SQL RutasBo get');
           console.log(array);
-          resolve(array);
+          resolve(array.slice(( APP_CONFIG.LIMIT_SQL * page) - APP_CONFIG.LIMIT_SQL, ( APP_CONFIG.LIMIT_SQL * page)));
         })
         .catch(ex => {
           console.log(ex);

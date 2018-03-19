@@ -4,7 +4,7 @@ export const APP_CONFIG = {
   SERVER_URL: "http://moscutourgratis.com:8069",
   SERVER_PORT: "8069",
   DATABASE_NAME: "Audio_Guia_Rusia",
-  SQLITE_DB: "Audio_Guia_Rusia_07.db",
+  SQLITE_DB: "Audio_Guia_Rusia_23.db",
   URL_PLAY_STORE: "https://play.google.com/store/apps/developer?id:Tour%20Gratis%20Rusia&hl:es",
   EMAIL: "app_admin",
   PASS_EMAIL: "p{R2H[",
@@ -22,5 +22,5 @@ export const APP_CONFIG = {
   CODE_RESERVA_EDIT: 1040,
   CODE_FUTURA_SHOW: 1050,
   CODE_FUTURA_EDIT: 1060,
-  LIMIT_SQL: 16
+  LIMIT_SQL: 5
 };
