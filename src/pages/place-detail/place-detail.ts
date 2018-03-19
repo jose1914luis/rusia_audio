@@ -1,12 +1,8 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
-/**
- * Generated class for the PlaceDetailPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import {Component} from '@angular/core';
+import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import {RutasBo} from "../../models/RutasBo";
+import {LugaresBo} from "../../models/LugaresBo";
+import {DomSanitizer} from "@angular/platform-browser";
 
 @IonicPage()
 @Component({
@@ -15,7 +11,20 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class PlaceDetailPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  tipo: string = '';
+  itemLugar: LugaresBo = new LugaresBo();
+  itemRuta: RutasBo = new RutasBo();
+
+  constructor(public navCtrl: NavController,
+              public domSanitizationService: DomSanitizer,
+              public navParams: NavParams) {
+
+    this.tipo = this.navParams.get('tipo');
+    if (this.tipo === 'routes') {
+      this.itemRuta = new RutasBo(this.navParams.get('item'));
+    } else {
+      this.itemLugar = new LugaresBo(this.navParams.get('item'));
+    }
   }
 
   ionViewDidLoad() {

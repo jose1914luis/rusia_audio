@@ -18,7 +18,7 @@ export class MapaPage {
               public media: Media,
               public musicControls: MusicControls) {
 
-    this.play();
+    // this.play();
   }
 
   play(){

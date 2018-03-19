@@ -44,7 +44,7 @@ export class RutasBo {
     this._imagenes = obj.imagenes;
     this._rutas = obj.rutas;
     this._lugares = obj.lugares;
-    this._images_bo = new Array();
+    this._images_bo = obj.images_bo || new Array();
   }
 
 

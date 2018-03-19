@@ -29,7 +29,7 @@ export class GeneralPage {
               public services: Services) {
 
     console.log('entro');
-
+    this.title = this.navParams.get('title');
     if (this.navParams.get('tipo')) {
       this.tipo = this.navParams.get('tipo');
     }
@@ -65,6 +65,9 @@ export class GeneralPage {
 
   async cargarDatos() {
     await new GeneralBo().get(this.page, this.tipo).then(async data => {
+
+      this.util.LoadingShow();
+
         let array: Array<GeneralBo> = new Array();
         if ((data instanceof Array) === false) {
           try {
@@ -74,6 +77,23 @@ export class GeneralPage {
         } else {
           array = data;
         }
+
+        let images: Array<any> = new Array();
+        array.map((value) => {
+          if (value.imagenes) {
+            value.imagenes.split(',').map(img => {
+              if (img)
+                images.push(img);
+            });
+          }
+        });
+
+        if (images.length > 0) {
+          await this.services.login().then(async () => {
+            await this.services.addImages(images).then().catch();
+          }).catch();
+        }
+
         for (let lugar of array) {
           let obj: GeneralBo = lugar;
           if (obj.imagenes !== "0") {
@@ -92,6 +112,9 @@ export class GeneralPage {
           }
           this.items.push(obj);
         }
+
+      this.util.LoadingHide();
+
       }
     ).catch(e => {
       debugger;

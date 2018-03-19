@@ -24,26 +24,76 @@ export class UtilTool {
   };
 
   public static pages: Array<Page> = [
-    {title: 'Mapa', component: 'MapaPage', icon: 'icon_map.png', params: {}},
-    {title: 'Rutas', component: 'PlacesPage', icon: 'icon_route.png', params: {tipo: 'routes'}},
-    {title: 'Lugares de interes', component: 'PlacesPage', icon: 'icon_place.png', params: {tipo: 'interes'}},
-    {title: 'Donde comer', component: 'PlacesPage', icon: 'icon_foot.png', params: {tipo: 'comer'}},
-    {title: 'Donde dormir', component: 'PlacesPage', icon: 'icon_sleep.png', params: {tipo: 'dormir'}},
-    {title: 'Otros places', component: 'PlacesPage', icon: 'icon_place.png', params: {tipo: 'otros'}},
-    {title: 'Mis favoritos', component: 'PlacesPage', icon: 'icon_star.png', params: {tipo: 'favoritos'}},
-    {title: 'Información util', component: 'GeneralPage', icon: 'icon_info.png', params: {tipo: 'informacion'}},
-    {title: 'Curiosidades', component: 'GeneralPage', icon: 'ic_curiosidad.png', params: {tipo: 'curiosidad'}},
-    {title: 'Historia del metro', component: 'GeneralPage', icon: 'ic_historia.png', params: {tipo: 'historia'}},
-    {title: 'Esquema del metro', component: 'EsquemaMetroPage', icon: 'ic_esquema.png', params: {}},
-    {title: 'Estaciones del metro', component: 'GeneralPage', icon: 'ic_estaciones.png', params: {}},
+    {title: 'Mapa', component: 'MapaPage', icon: 'icon_map.png', params: {title: 'Mapa'}},
+    {title: 'Rutas', component: 'PlacesPage', icon: 'icon_route.png', params: {title: 'Rutas', tipo: 'routes'}},
+    {
+      title: 'Lugares de interes',
+      component: 'PlacesPage',
+      icon: 'icon_place.png',
+      params: {title: 'Lugares de interes', tipo: 'interes'}
+    },
+    {
+      title: 'Donde comer',
+      component: 'PlacesPage',
+      icon: 'icon_foot.png',
+      params: {title: 'Donde comer', tipo: 'comer'}
+    },
+    {
+      title: 'Donde dormir',
+      component: 'PlacesPage',
+      icon: 'icon_sleep.png',
+      params: {title: 'Donde dormir', tipo: 'dormir'}
+    },
+    {
+      title: 'Otros places',
+      component: 'PlacesPage',
+      icon: 'icon_place.png',
+      params: {title: 'Otros places', tipo: 'otros'}
+    },
+    {
+      title: 'Mis favoritos',
+      component: 'PlacesPage',
+      icon: 'icon_star.png',
+      params: {title: 'Mis favoritos', tipo: 'favoritos'}
+    },
+    {
+      title: 'Información util',
+      component: 'GeneralPage',
+      icon: 'icon_info.png',
+      params: {title: 'Información util', tipo: 'informacion'}
+    },
+    {
+      title: 'Curiosidades',
+      component: 'GeneralPage',
+      icon: 'ic_curiosidad.png',
+      params: {title: 'Curiosidades', tipo: 'curiosidad'}
+    },
+    {
+      title: 'Historia del metro',
+      component: 'GeneralPage',
+      icon: 'ic_historia.png',
+      params: {title: 'Historia del metro', tipo: 'historia'}
+    },
+    {
+      title: 'Esquema del metro',
+      component: 'EsquemaMetroPage',
+      icon: 'ic_esquema.png',
+      params: {title: 'Esquema del metro'}
+    },
+    {
+      title: 'Estaciones del metro',
+      component: 'GeneralPage',
+      icon: 'ic_estaciones.png',
+      params: {title: 'Estaciones del metro'}
+    },
     {
       title: 'Curiosidades del metro',
       component: 'GeneralPage',
       icon: 'ic_curiosidad_metro.png',
-      params: {tipo: 'curiosidad_metro'}
+      params: {title: 'Curiosidades del metro', tipo: 'curiosidad_metro'}
     },
-    {title: 'Configuración', component: 'SettingsPage', icon: 'icon_settings.png', params: {}},
-    {title: 'Otras ciudades', component: 'CiudadesPage', icon: 'icon_city.png', params: {}}
+    {title: 'Configuración', component: 'SettingsPage', icon: 'icon_settings.png', params: {title: 'Configuración'}},
+    {title: 'Otras ciudades', component: 'CiudadesPage', icon: 'icon_city.png', params: {title: 'Otras ciudades'}}
   ];
 
   public loading: any;

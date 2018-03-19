@@ -35,7 +35,7 @@ export class LugaresBo {
     this._icon_marker = obj.icon_marker;
     this._distance = obj.distance || 0;
     this._display_distance = obj.display_distance || '0 Km';
-    this._images_bo = new Array();
+    this._images_bo = obj.images_bo || new Array();
   }
 
   private _id: number;
@@ -379,6 +379,8 @@ export class LugaresBo {
             array = array.filter(f => f.interes === 'true');
           else if (where === 'otros')
             array = array.filter(f => f.comer === 'false' && f.dormir === 'false' && f.interes === 'false');
+          else
+            array = new Array();
 
           console.log('fin Executed SQL LugaresBo get');
           console.log(array);

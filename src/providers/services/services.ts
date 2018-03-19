@@ -418,7 +418,8 @@ export class Services {
             apartado: apartado
           };
 
-          await GeneralBo.exist(item.id_odoo).then(exist => {
+
+          await GeneralBo.exist(item.id_odoo, apartado).then(exist => {
             if (exist) {
               updateArray.push(lugar);
             }
@@ -474,6 +475,7 @@ export class Services {
     });
   }
 
+  /*
   async addIdsImages(ids: string): Promise<any> {
     return new Promise((resolve, reject) => {
       if (ids) {
@@ -509,6 +511,7 @@ export class Services {
       }
     });
   }
+  */
 
   getImage(id: string): Promise<ImagenesBo> {
     return new Promise((resolve, reject) => {
@@ -658,7 +661,7 @@ export class Services {
       console.log(defaultQuery);
       console.log('ide');
       console.log(where);
-      self.odoo.search_read('audioguia.imagenes', [['id', 'in', where]], fields).then(value => {
+      self.odoo.search_read('audioguia.imagenes', [['id', 'in', where]], fields).then(async value => {
 
         for (var data of value) {
           const img = self.domSanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + data.image);
@@ -671,12 +674,11 @@ export class Services {
 
           imagen.exist(data.id).then(async exist => {
             if (!exist.id_odoo)
-              await new ImagenesBo().insert(data.id).then().catch();
-
-            await new ImagenesBo().update(imagen).then().catch();
-
+              await new ImagenesBo().insert(imagen).then().catch();
           }).catch(ex => {
           });
+
+          await new ImagenesBo().update(imagen).then().catch();
         }
 
         resolve(true);

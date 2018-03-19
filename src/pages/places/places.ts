@@ -33,7 +33,7 @@ export class PlacesPage {
               public services: Services) {
 
     console.log('entro');
-
+    this.title = this.navParams.get('title');
     if (this.navParams.get('tipo')) {
       this.tipo = this.navParams.get('tipo');
     }
@@ -50,9 +50,10 @@ export class PlacesPage {
   }
 
 
-  openItem(item: LugaresBo) {
+  openItem(item: any) {
     this.navCtrl.push('PlaceDetailPage', {
-      item: item
+      item: item,
+      tipo: this.tipo
     });
   }
 

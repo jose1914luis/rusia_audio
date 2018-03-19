@@ -42,9 +42,9 @@ export class ImagenesBo {
     this._image = value;
   }
 
-  insert(id: string): Promise<boolean> {
+  insert(obj: ImagenesBo): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      AudioguiaSQLiteHelper.db.executeSql(new ImagenesEntry().INSERT, [id])
+      AudioguiaSQLiteHelper.db.executeSql(new ImagenesEntry().INSERT, [obj.id_odoo, obj.image])
         .then((data) => {
           console.log('Executed SQL ImagenesBo insert');
           console.log(data);

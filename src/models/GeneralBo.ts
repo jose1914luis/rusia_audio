@@ -30,7 +30,7 @@ export class GeneralBo {
     this._name = obj.name;
     this._descripcion = obj.descripcion;
     this._imagenes = obj.imagenes;
-    this._images_bo = new Array();
+    this._images_bo = obj.images_bo || new Array();
     this._score = obj.score;
     this._apartado = obj.apartado;
     this._es_gratis = obj.es_gratis;
@@ -147,44 +147,59 @@ export class GeneralBo {
   public static saveAllJson(newData: Array<IGeneral>, updateData: Array<IGeneral>) {
     console.log(newData);
     console.log(updateData);
-    return new Promise((resolve, reject) => {
-      const generalEntry: GeneralEntry = new GeneralEntry();
-      var json = {
-        "structure": {
-          "tables": {
-            "general": " (" +
-            "[" + generalEntry.ID + "], " +
-            "[" + generalEntry.ID_ODOO + "], [" + generalEntry.NAME + "]," +
-            "[" + generalEntry.DESCRIPTION + "], [" + generalEntry.IMAGENES + "]," +
-            "[" + generalEntry.APARTADO + "]" +
-            ")"
-          }
-        },
-        "data": {
-          "inserts": {
-            "general": newData
-          }
-        }
-      };
+    return new Promise(async (resolve, reject) => {
+        const generalEntry: GeneralEntry = new GeneralEntry();
 
-      AudioguiaSQLiteHelper.sqlitePorter.importJsonToDb(AudioguiaSQLiteHelper.db, json).then(success => {
-        console.log("success json GeneralBo");
-        console.log(success);
-        resolve(success);
-      }).catch((error) => {
-        console.log("error json GeneralBo");
-        console.log(error);
-        reject(error);
-      });
-    });
+        for (let data of newData) {
+          await AudioguiaSQLiteHelper.db.executeSql(new GeneralEntry().INSERT, [data.id_odoo, data.id_odoo, data.name, data.descripcion, data.apartado, data.imagenes])
+            .then((data) => {
+            })
+            .catch(ex => {
+              console.log(ex);
+              reject({status: 500, message: ex || 'Error GeneralBo insert '});
+            });
+        }
+
+        resolve(true);
+        /* var json = {
+           "structure": {
+             "tables": {
+               "general": " (" +
+               "[" + generalEntry.ID + "], " +
+               "[" + generalEntry.ID_ODOO + "], [" + generalEntry.NAME + "]," +
+               "[" + generalEntry.DESCRIPTION + "], [" + generalEntry.IMAGENES + "]," +
+               "[" + generalEntry.APARTADO + "]" +
+               ")"
+             }
+           },
+           "data": {
+             "inserts": {
+               "general": newData
+             }
+           }
+         };
+
+         AudioguiaSQLiteHelper.sqlitePorter.importJsonToDb(AudioguiaSQLiteHelper.db, json).then(success => {
+           console.log("success json GeneralBo");
+           console.log(success);
+           resolve(success);
+         }).catch((error) => {
+           console.log("error json GeneralBo");
+           console.log(error);
+           reject(error);
+         });*/
+      }
+    );
   }
 
-  public get(page: number, aparto: string = ""): Promise<Array<GeneralBo>> {
+  public
+
+  get(page: number, aparto: string = ""): Promise<Array<GeneralBo>> {
     return new Promise((resolve, reject) => {
       const generalEntry: GeneralEntry = new GeneralEntry();
       const query = "SELECT * FROM " + generalEntry.TABLE_NAME; //+ " ORDER BY " + generalEntry.NAME + " LIMIT ? OFFSET ? ";
       AudioguiaSQLiteHelper.db.executeSql(query, [])
-     // AudioguiaSQLiteHelper.db.executeSql(query, [APP_CONFIG.LIMIT_SQL, ( APP_CONFIG.LIMIT_SQL * page)])
+      // AudioguiaSQLiteHelper.db.executeSql(query, [APP_CONFIG.LIMIT_SQL, ( APP_CONFIG.LIMIT_SQL * page)])
         .then((data) => {
           console.log('Executed SQL GeneralBo get');
           let array: Array<GeneralBo> = new Array();
@@ -207,9 +222,11 @@ export class GeneralBo {
     });
   }
 
-  public static exist(id: number): Promise<boolean> {
+  public static
+
+  exist(id: number, apartao: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      AudioguiaSQLiteHelper.db.executeSql(new GeneralEntry().SELECT_ONE, [id])
+      AudioguiaSQLiteHelper.db.executeSql(new GeneralEntry().SELECT_ONE, [id, apartao])
         .then((data) => {
           console.log('Executed SQL GeneralBo exist ' + data.rows.item(0));
           if (data.rows.item(0)) {

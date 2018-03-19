@@ -9,7 +9,7 @@
     Kremlin, San Basilio, y mucho más.
   </description>
     <author email="tourgratisrusia@gmail.com" href="https://tourgratisrusia.com/">Tour Gratis Rusia</author>
-    <content original-src="index.html" src="http://192.168.0.10:8100" />
+    <content src="index.html" />
     <access origin="*" />
     <allow-navigation href="*" />
     <allow-navigation href="http://moscutourgratis.com:8069/" />

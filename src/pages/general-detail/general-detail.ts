@@ -1,12 +1,7 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
-/**
- * Generated class for the GeneralDetailPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import {Component} from '@angular/core';
+import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import {GeneralBo} from "../../models/GeneralBo";
+import {DomSanitizer} from "@angular/platform-browser";
 
 @IonicPage()
 @Component({
@@ -15,7 +10,12 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class GeneralDetailPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  item: GeneralBo = new GeneralBo();
+
+  constructor(public navCtrl: NavController,
+              public domSanitizationService: DomSanitizer,
+              public navParams: NavParams) {
+    this.item = new GeneralBo(navParams.get('item'));
   }
 
   ionViewDidLoad() {
