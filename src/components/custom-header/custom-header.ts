@@ -9,6 +9,7 @@ export class CustomHeaderComponent {
 
 
   @Input() title: string;
+  @Input() events: any;
   toggleSearch: boolean = false;
 
   constructor() {
@@ -27,6 +28,12 @@ export class CustomHeaderComponent {
        this.currentItems = this.items.query({
          name: val
        });*/
+  }
+
+  onEvent(event: string, item: any, e: any) {
+    if (this.events[event]) {
+      this.events[event](item, e);
+    }
   }
 
 }

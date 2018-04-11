@@ -1,36 +1,37 @@
 <ion-header>
-
   <ion-navbar>
     <ion-title *ngIf="tipo !== 'routes'">{{itemLugar.name}}</ion-title>
     <ion-title *ngIf="tipo === 'routes'">{{itemRuta.name}}</ion-title>
   </ion-navbar>
-
 </ion-header>
 
-<ion-content>
-
-  <!--lugares-->
-  <div *ngIf="tipo !== 'routes'">
-    <ion-slides pager effect="fade">
-      <ion-slide *ngFor="let img of itemLugar.images_bo">
-        <img [src]="domSanitizationService.bypassSecurityTrustUrl(img)">
-      </ion-slide>
-    </ion-slides>
-    <p>{{itemLugar.descripcion}}</p>
-  </div>
-
-
-  <!--routes-->
-  <div *ngIf="tipo === 'routes'">
-    <ion-slides pager effect="fade">
-      <ion-slide *ngFor="let img of itemRuta.images_bo">
-        <img [src]="domSanitizationService.bypassSecurityTrustUrl(img)">
-      </ion-slide>
-    </ion-slides>
-    <p>{{itemRuta.descripcion}}</p>
-  </div>
+<ion-content padding *ngIf="tipo !== 'routes'">
+  <ion-slides pager effect="fade">
+    <ion-slide *ngFor="let img of itemLugar.images_bo">
+      <img [src]="domSanitizationService.bypassSecurityTrustUrl(img.image)">
+    </ion-slide>
+  </ion-slides>
+  <ion-fab right>
+    <button ion-fab mini>
+      <ion-icon name='play'></ion-icon>
+    </button>
+  </ion-fab>
+  <p>{{itemLugar.descripcion}}</p>
 </ion-content>
 
+<ion-content padding *ngIf="tipo === 'routes'">
+  <ion-slides pager effect="fade">
+    <ion-slide *ngFor="let img of itemRuta.images_bo">
+      <img [src]="domSanitizationService.bypassSecurityTrustUrl(img.image)">
+    </ion-slide>
+  </ion-slides>
+  <ion-fab right>
+    <button ion-fab mini>
+      <ion-icon name='play'></ion-icon>
+    </button>
+  </ion-fab>
+  <p>{{itemRuta.descripcion}}</p>
+</ion-content>
 
 <ion-footer>
   <ion-toolbar>

@@ -1,9 +1,9 @@
-<custom-header title="{{title}}"></custom-header>
+<custom-header title="{{title}}" [events]="getEvents(this)"></custom-header>
 <ion-content no-padding has-header>
 
   <!--lugares-->
   <div *ngIf="tipo !== 'routes'">
-    <ion-card *ngFor="let item of lugaresItems">
+    <ion-card *ngFor="let item of filterLugaresItems">
       <div (click)="openItem(item)">
         <ion-item no-padding no-margin no-lines>
           <ion-avatar>
@@ -26,11 +26,6 @@
           <button ion-button color="light" clear small icon-start>
             <img src="assets/img/icon_distance.png"/>&nbsp;&nbsp;
             {{item.display_distance}}
-          </button>
-        </ion-col>
-        <ion-col *ngIf="item.tipo !== 'place'">
-          <button ion-button color="light" clear small icon-start>
-            <img src="assets/img/icon_time.png"/>&nbsp;&nbsp;
           </button>
         </ion-col>
       </ion-row>
@@ -73,32 +68,56 @@
   </div>
 
 
-  <ion-infinite-scroll (ionInfinite)="getDataScroll($event)">
+<!--  <ion-infinite-scroll (ionInfinite)="getDataScroll($event)">
     <ion-infinite-scroll-content
       loadingSpinner="bubbles"
       loadingText="Loading more data...">
     </ion-infinite-scroll-content>
-  </ion-infinite-scroll>
+  </ion-infinite-scroll>-->
 </ion-content>
 
 
-<ion-footer>
+<ion-footer *ngIf="tipo === 'routes'">
   <ion-toolbar>
     <ion-grid>
       <ion-row>
         <ion-col>
-          <button ion-button clear text-center>
-            <ion-icon name='star' icon-medium></ion-icon>
+          <button ion-button clear text-center (click)="orderBy('popular')">
+            <ion-icon name='star-outline' icon-medium></ion-icon>
           </button>
         </ion-col>
         <ion-col>
-          <button ion-button clear text-center>
+          <button ion-button clear text-center (click)="orderBy('alphabetical')">
             <i class="icon icon-sort-alphabetical" icon-medium></i>
           </button>
         </ion-col>
         <ion-col>
-          <button ion-button clear text-center>
+          <button ion-button clear text-center (click)="orderBy('duration')">
             <img src="assets/img/icon_time.png"/>
+          </button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>
+
+<ion-footer *ngIf="tipo !== 'routes'">
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <button ion-button clear text-center (click)="orderBy('popular')">
+            <ion-icon name='star-outline' icon-medium></ion-icon>
+          </button>
+        </ion-col>
+        <ion-col>
+          <button ion-button clear text-center (click)="orderBy('alphabetical')">
+            <i class="icon icon-sort-alphabetical" icon-medium></i>
+          </button>
+        </ion-col>
+        <ion-col>
+          <button ion-button clear text-center (click)="orderBy('tipo')">
+            tipo
           </button>
         </ion-col>
       </ion-row>

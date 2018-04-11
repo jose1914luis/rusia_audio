@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{item.name}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-slides pager effect="fade">
+    <ion-slide *ngFor="let img of item.images_bo">
+      <img [src]="domSanitizationService.bypassSecurityTrustUrl(img.image)">
+    </ion-slide>
+  </ion-slides>
+  <ion-fab right>
+    <button ion-fab mini>
+      <ion-icon name='play'></ion-icon>
+    </button>
+  </ion-fab>
+  <p>{{item.descripcion}}</p>
+</ion-content>

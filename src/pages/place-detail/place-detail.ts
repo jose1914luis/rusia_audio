@@ -20,10 +20,12 @@ export class PlaceDetailPage {
               public navParams: NavParams) {
 
     this.tipo = this.navParams.get('tipo');
+    console.log(this.navParams.get('tipo'));
+    console.log(this.navParams.get('item'));
     if (this.tipo === 'routes') {
-      this.itemRuta = new RutasBo(this.navParams.get('item'));
+      this.itemRuta = this.navParams.get('item');
     } else {
-      this.itemLugar = new LugaresBo(this.navParams.get('item'));
+      this.itemLugar = this.navParams.get('item');
     }
   }
 

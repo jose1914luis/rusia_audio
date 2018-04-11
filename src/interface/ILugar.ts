@@ -1,6 +1,6 @@
 export interface ILugar {
   id: number;
-  id_odoo: number;
+  id_odoo: string;
   name: string;
   descripcion: string;
   score: number;

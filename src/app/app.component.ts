@@ -8,6 +8,7 @@ import {FirstRunPage, SplashPage} from '../pages/pages';
 import {Settings, Services} from '../providers/providers';
 import {UtilTool} from "../providers/util";
 import {AudioguiaSQLiteHelper} from "../database/AudioguiaSQLiteHelper";
+import {Page} from "../models/pages";
 
 @Component({
   template: `
@@ -20,9 +21,9 @@ import {AudioguiaSQLiteHelper} from "../database/AudioguiaSQLiteHelper";
 
       <ion-content>
         <ion-list>
-          <button menuClose ion-item (click)="openPage({title: 'Home', component: 'MainPage', icon: ''})">
+          <button menuClose ion-item (click)="openPage({title: 'Home', component: 'MainPage', icon: '',  params: {}})">
             <ion-icon name="home"></ion-icon>
-            Home
+            Inicio
           </button>
           <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
             <ion-icon name="{{p.icon}}"></ion-icon>
@@ -107,12 +108,12 @@ export class MyApp {
     console.log("FrecuenciaSincronizacion");
     console.log(5);
 
-/*
-    if (horas <= 5)
-      return false;
-    else
-      */
-      return true;
+    /*
+        if (horas <= 5)
+          return false;
+        else
+          */
+    return true;
   }
 
   initSync(util) {
@@ -212,10 +213,10 @@ export class MyApp {
     });
   }
 
-  openPage(page) {
+  openPage(page: Page) {
     // Reset the main nav to have just this page
     // we wouldn't want the back button to show in this scenario
-    this.nav.setRoot(page.component);
+    this.nav.setRoot(page.component, page.params);
     //this.nav.setRoot(page.component);
   }
 }

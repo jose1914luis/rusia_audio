@@ -10,7 +10,7 @@ import {IonicStorageModule, Storage} from '@ionic/storage';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
-
+import {LocalNotifications} from '@ionic-native/local-notifications';
 
 import {InAppBrowser} from '@ionic-native/in-app-browser';
 import {Geolocation} from '@ionic-native/geolocation';
@@ -93,6 +93,7 @@ export function provideSettings(storage: Storage) {
     UtilTool,
     Geolocation,
     InAppBrowser,
+    LocalNotifications,
     SQLite,
     SQLitePorter,
     AudioguiaSQLiteHelper,

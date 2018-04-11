@@ -82,9 +82,31 @@ export class ImagenesBo {
           if (data.rows.item(0))
             resolve(new ImagenesBo(data.rows.item(0)));
           else
-            resolve(new ImagenesBo());
+            reject({status: 500, message: 'Error ImagenesBo exist ' + id_odoo});
         })
         .catch(ex => {
+          console.log(ex);
+          reject({status: 500, message: ex || 'Error ImagenesBo exist ' + id_odoo});
+        });
+    });
+  }
+
+  existImg(id_odoo: string): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      AudioguiaSQLiteHelper.db.executeSql(new ImagenesEntry().EXIST_IMG, [id_odoo])
+        .then((data) => {
+
+          console.log('Executed SQL ImagenesBo exist ' + id_odoo);
+          console.log(data);
+          console.log(data.rows);
+          if (data.rows.length === 0)
+            resolve(true);
+          else
+            resolve(false);
+        })
+        .catch(ex => {
+
+          debugger
           console.log(ex);
           reject({status: 500, message: ex || 'Error ImagenesBo exist'});
         });

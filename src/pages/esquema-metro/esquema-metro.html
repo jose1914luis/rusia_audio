@@ -6,5 +6,8 @@
 
 
 <ion-content padding>
-
+  <h2 text-center>{{item.name}}</h2>
+  <img [src]="domSanitizationService.bypassSecurityTrustUrl(img)" *ngIf="img">
+  <img src="assets/img/not_image.png" *ngIf="!img">
+  <p>{{item.descripcion}}</p>
 </ion-content>

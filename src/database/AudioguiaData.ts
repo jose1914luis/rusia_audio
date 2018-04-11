@@ -12,7 +12,7 @@ class LugaresEntry {
   public ID: string = "id";
   public ID_ODOO: string = "id_odoo";
   public NAME: string = "name";
-  public DESCRIPTION: string = "description";
+  public DESCRIPTION: string = "descripcion";
   public SCORE: string = "score";
   public DIRECCION: string = "distancia";
   public HORARIO: string = "duracion";
@@ -25,46 +25,54 @@ class LugaresEntry {
   public INTERES: string = "interes";
   public ES_GRATIS: string = "es_gratis";
   public IMAGENES: string = "imagenes";
-  public RUTAS_IDS: string = "rutas_ids";
-  public LUGARES_IDS: string = "lugares_ids";
+  public RUTAS_IDS: string = "rutas";
+  public LUGARES_IDS: string = "lugares";
   public AUDIO_NAME: string = "audio_name";
   public AUDIO: string = "audio";
   public CALIFICADO: string = "calificado";
   public WRITE_DATE: string = "write_date";
   public URL: string = "url";
-  public MARKER_ICON: string = "marker_icon";
+  public MARKER_ICON: string = "icon_marker";
 
   public CREATE: string =
     "CREATE TABLE IF NOT EXISTS " + this.TABLE_NAME + " (" +
     this.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-    this.ID_ODOO + " INTEGER, " +
-    this.NAME + " TEXT, " +
-    this.DESCRIPTION + " TEXT, " +
-    this.SCORE + " INTEGER, " +
-    this.DIRECCION + " TEXT, " +
-    this.HORARIO + " TEXT, " +
-    this.PRECIO + " TEXT, " +
+    this.ID_ODOO + " TEXT NULL, " +
+    this.NAME + " TEXT NULL, " +
+    this.DESCRIPTION + " TEXT NULL, " +
+    this.SCORE + " INTEGER DEFAULT 0, " +
+    this.DIRECCION + " TEXT NULL, " +
+    this.HORARIO + " TEXT NULL, " +
+    this.PRECIO + " TEXT NULL, " +
     this.LATITUD + " REAL, " +
     this.lONGITUD + " REAL, " +
-    this.TIPO + " TEXT, " +
-    this.COMER + " TEXT, " +
-    this.DORMIR + " TEXT, " +
-    this.INTERES + " TEXT, " +
-    this.ES_GRATIS + " TEXT, " +
+    this.TIPO + " TEXT NULL, " +
+    this.COMER + " TEXT NULL DEFAULT '0', " +
+    this.DORMIR + " TEXT NULL DEFAULT '0', " +
+    this.INTERES + " TEXT NULL  DEFAULT '0', " +
+    this.ES_GRATIS + " TEXT NULL DEFAULT '0', " +
     this.CALIFICADO + " INTEGER DEFAULT 0, " +
-    this.IMAGENES + " TEXT, " +
-    this.RUTAS_IDS + " TEXT, " +
-    this.AUDIO_NAME + " TEXT, " +
-    this.WRITE_DATE + " TEXT, " +
-    this.AUDIO + " TEXT, " +
-    this.URL + " TEXT, " +
-    this.MARKER_ICON + " TEXT, " +
-    this.LUGARES_IDS + " TEXT)";
+    this.IMAGENES + " TEXT NULL, " +
+    this.RUTAS_IDS + " TEXT NULL, " +
+    this.AUDIO_NAME + " TEXT NULL, " +
+    this.WRITE_DATE + " TEXT NULL, " +
+    this.AUDIO + " TEXT NULL, " +
+    this.URL + " TEXT NULL, " +
+    this.MARKER_ICON + " TEXT NULL, " +
+    this.LUGARES_IDS + " TEXT NULL)";
 
   public DELETE: string =
     "DROP TABLE IF EXISTS " + this.TABLE_NAME;
 
-  public INSERT = "INSERT INTO " + this.TABLE_NAME + " (" + this.ID_ODOO + ") VALUES (?) ";
+  public INSERT = "INSERT INTO " + this.TABLE_NAME + " (" + this.ID_ODOO + ", " + this.NAME + ", " +
+    this.DESCRIPTION + ", " + this.SCORE + ", " + this.DIRECCION + ", " + this.HORARIO + ", " + this.PRECIO + ", " +
+    this.LATITUD + ", " + this.lONGITUD + ", " + this.TIPO + ", " + this.COMER + ", " + this.DORMIR + ", " +
+    this.INTERES + ", " + this.ES_GRATIS + ", " + this.IMAGENES + ", " + this.RUTAS_IDS + ", " +
+    this.AUDIO_NAME + ", " + this.URL + ", " + this.MARKER_ICON + ", " + this.LUGARES_IDS + ") " +
+    " VALUES (?, ?, ?, ?, ?," +
+    " ? ,?, ?, ?, ?," +
+    " ?, ?, ?, ?, ?," +
+    " ?, ?, ?, ?, ?) ";
 
   // public UPDATE = "UPDATE " + this.TABLE_NAME + " SET " + this.IMAGE + "= ? WHERE " + this.ID_ODOO + " = ? ";
 
@@ -90,9 +98,9 @@ class CitysEntry {
     "CREATE TABLE IF NOT EXISTS " + this.TABLE_NAME + " (" +
     this.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
     this.ID_ODOO + " INTEGER," +
-    this.NAME + " TEXT," +
-    this.URL + " TEXT," +
-    this.IMAGE + " TEXT)";
+    this.NAME + " TEXT NULL," +
+    this.URL + " TEXT NULL," +
+    this.IMAGE + " TEXT NULL)";
 
   public DELETE: string =
     "DROP TABLE IF EXISTS " + this.TABLE_NAME;
@@ -111,7 +119,7 @@ class GeneralEntry {
   public ID: string = "id";
   public ID_ODOO: string = "id_odoo";
   public NAME: string = "name";
-  public DESCRIPTION: string = "description";
+  public DESCRIPTION: string = "descripcion";
   public IMAGENES: string = "imagenes";
   public APARTADO: string = "apartado";
   public AUDIO_NAME: string = "audio_name";
@@ -122,13 +130,13 @@ class GeneralEntry {
     "CREATE TABLE IF NOT EXISTS " + this.TABLE_NAME + " (" +
     this.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
     this.ID_ODOO + " INTEGER, " +
-    this.NAME + " TEXT, " +
-    this.DESCRIPTION + " TEXT, " +
-    this.APARTADO + " TEXT, " +
-    this.AUDIO_NAME + " TEXT, " +
-    this.AUDIO + " TEXT, " +
-    this.WRITE_DATE + " TEXT, " +
-    this.IMAGENES + " TEXT)";
+    this.NAME + " TEXT NULL, " +
+    this.DESCRIPTION + " TEXT NULL, " +
+    this.APARTADO + " TEXT NULL, " +
+    this.AUDIO_NAME + " TEXT NULL, " +
+    this.AUDIO + " TEXT NULL, " +
+    this.WRITE_DATE + " TEXT NULL, " +
+    this.IMAGENES + " TEXT NULL)";
 
   public DELETE =
     "DROP TABLE IF EXISTS " + this.TABLE_NAME;
@@ -137,7 +145,7 @@ class GeneralEntry {
 
   public SELECT_ALL = "SELECT * FROM " + this.TABLE_NAME;
 
-  public INSERT = "INSERT INTO " + this.TABLE_NAME + " (" + this.ID + ", " + this.ID_ODOO + ", " + this.NAME + "," + this.DESCRIPTION + ", " + this.APARTADO + "," + this.IMAGENES + ") VALUES (?, ?, ?, ?, ?, ?)";
+  public INSERT = "INSERT INTO " + this.TABLE_NAME + " (" + this.ID_ODOO + ", " + this.NAME + "," + this.DESCRIPTION + ", " + this.APARTADO + "," + this.IMAGENES + ") VALUES (?, ?, ?, ?, ?)";
 
 }
 
@@ -155,9 +163,9 @@ class FavoritosEntry {
     " (" +
     this.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
     this.FK + " INTEGER, " +
-    this.SECCION + " TEXT, " +
-    this.IMAGENES + " TEXT, " +
-    this.NAME + " TEXT" +
+    this.SECCION + " TEXT NULL, " +
+    this.IMAGENES + " TEXT NULL, " +
+    this.NAME + " TEXT NULL" +
     ")";
 
   public DELETE: string = "DROP TABLE IF EXISTS " + this.TABLE_NAME;
@@ -172,7 +180,7 @@ class RutasEntry {
   public ID_ODOO: string = "id_odoo";
   public NAME: string = "name";
   public AUDIO: string = "audio";
-  public DESCRIPTION: string = "description";
+  public DESCRIPTION: string = "descripcion";
   public SCORE: string = "score";
   public DISTANCIA: string = "distancia";
   public DURACION: string = "duracion";
@@ -188,21 +196,21 @@ class RutasEntry {
   public CREATE: string =
     "CREATE TABLE IF NOT EXISTS " + this.TABLE_NAME + " (" +
     this.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-    this.ID_ODOO + " INTEGER, " +
-    this.NAME + " TEXT, " +
-    this.DESCRIPTION + " TEXT, " +
-    this.SCORE + " INTEGER, " +
-    this.DISTANCIA + " TEXT, " +
-    this.DURACION + " TEXT, " +
-    this.RUTA + " TEXT, " +
-    this.ES_GRATIS + " INTEGER, " +
+    this.ID_ODOO + " TEXT, " +
+    this.NAME + " TEXT NULL, " +
+    this.DESCRIPTION + " TEXT NULL, " +
+    this.SCORE + " INTEGER DEFAULT 0, " +
+    this.DISTANCIA + " TEXT NULL, " +
+    this.DURACION + " TEXT NULL, " +
+    this.RUTA + " TEXT NULL, " +
+    this.ES_GRATIS + " INTEGER DEFAULT 0, " +
     this.CALIFICADO + " INTEGER DEFAULT 0, " +
-    this.IMAGENES + " TEXT, " +
-    this.RUTAS_IDS + " TEXT, " +
-    this.AUDIO_NAME + " TEXT, " +
-    this.AUDIO + " TEXT, " +
-    this.WRITE_DATE + " TEXT, " +
-    this.LUGARES_IDS + " TEXT)";
+    this.IMAGENES + " TEXT NULL, " +
+    this.RUTAS_IDS + " TEXT NULL, " +
+    this.AUDIO_NAME + " TEXT NULL, " +
+    this.AUDIO + " TEXT NULL, " +
+    this.WRITE_DATE + " TEXT NULL, " +
+    this.LUGARES_IDS + " TEXT NULL)";
 
   public DELETE: string =
     "DROP TABLE IF EXISTS " + this.TABLE_NAME;
@@ -221,7 +229,7 @@ class EstacionesEntry {
   public ID: string = "id";
   public ID_ODOO: string = "id_odoo";
   public NAME: string = "name";
-  public DESCRIPTION: string = "description";
+  public DESCRIPTION: string = "descripcion";
   public IMAGENES: string = "imagenes";
   public SCORE: string = "score";
   public ES_GRATIS: string = "es_gratis";
@@ -236,16 +244,16 @@ class EstacionesEntry {
     "CREATE TABLE IF NOT EXISTS " + this.TABLE_NAME + " (" +
     this.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
     this.ID_ODOO + " INTEGER, " +
-    this.NAME + " TEXT, " +
-    this.DESCRIPTION + " TEXT, " +
-    this.ES_GRATIS + " INTEGER, " +
+    this.NAME + " TEXT NULL, " +
+    this.DESCRIPTION + " TEXT NULL, " +
+    this.ES_GRATIS + " INTEGER DEFAULT 0, " +
     this.CALIFICADO + " INTEGER DEFAULT 0, " +
-    this.SCORE + " TEXT, " +
-    this.PRECIO + " TEXT, " +
-    this.AUDIO_NAME + " TEXT, " +
-    this.AUDIO + " TEXT, " +
-    this.WRITE_DATE + " TEXT, " +
-    this.IMAGENES + " TEXT)";
+    this.SCORE + " TEXT NULL, " +
+    this.PRECIO + " TEXT NULL, " +
+    this.AUDIO_NAME + " TEXT NULL, " +
+    this.AUDIO + " TEXT NULL, " +
+    this.WRITE_DATE + " TEXT NULL, " +
+    this.IMAGENES + " TEXT NULL)";
 
   public DELETE =
     "DROP TABLE IF EXISTS " + this.TABLE_NAME;
@@ -270,8 +278,8 @@ class LogEnty {
     "CREATE TABLE IF NOT EXISTS " + this.TABLE_NAME + " (" +
     this.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
     this.ID_ODOO + " INTEGER," +
-    this.NAME + " TEXT," +
-    this.ACTION + " TEXT, " +
+    this.NAME + " TEXT NULL," +
+    this.ACTION + " TEXT NULL, " +
     this.ID_MODIFY + " INTEGER)";
 
   public DELETE =
@@ -290,7 +298,7 @@ class ImagenesEntry {
     "CREATE TABLE IF NOT EXISTS " + this.TABLE_NAME + " (" +
     this.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
     this.ID_ODOO + " INTEGER," +
-    this.IMAGE + " TEXT)";
+    this.IMAGE + " TEXT NULL)";
 
   public DELETE =
     "DROP TABLE IF EXISTS " + this.TABLE_NAME;
@@ -300,6 +308,8 @@ class ImagenesEntry {
   public UPDATE = "UPDATE " + this.TABLE_NAME + " SET " + this.IMAGE + "= ? WHERE " + this.ID_ODOO + " = ? ";
 
   public EXIST = "SELECT * FROM  " + this.TABLE_NAME + " WHERE " + this.ID_ODOO + " = ? LIMIT 1 ";
+
+  public EXIST_IMG = "SELECT * FROM  " + this.TABLE_NAME + " WHERE " + this.ID_ODOO + " = ? AND ( " + this.IMAGE + " IS NULL OR " + this.IMAGE + " = '' ) LIMIT 1 ";
 
   public SELECT_ONE = "SELECT * FROM  " + this.TABLE_NAME + " WHERE " + this.ID_ODOO + " = ? LIMIT 1 ";
 
@@ -320,7 +330,7 @@ class TipoEntry {
     "CREATE TABLE IF NOT EXISTS " + this.TABLE_NAME + " (" +
     this.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
     this.ID_ODOO + " INTEGER," +
-    this.IMAGE + " TEXT)";
+    this.IMAGE + " TEXT NULL)";
 
   public DELETE: string =
     "DROP TABLE IF EXISTS " + this.TABLE_NAME;
@@ -341,8 +351,8 @@ class LogFileEnty {
     "CREATE TABLE IF NOT EXISTS " + this.TABLE_NAME + " (" +
     this.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
     this.ID_ODOO + " INTEGER," +
-    this.NAME + " TEXT," +
-    this.ACTION + " TEXT, " +
+    this.NAME + " TEXT NULL," +
+    this.ACTION + " TEXT NULL, " +
     this.ID_MODIFY + " INTEGER)";
 
   public DELETE: string =

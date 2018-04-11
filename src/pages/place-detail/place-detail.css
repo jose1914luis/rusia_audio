@@ -1,3 +1,11 @@
-
+page-place-detail ion-content {
+  top: 0px !important; }
+page-place-detail ion-slides {
+  height: 40%; }
+page-place-detail .swiper-slide img {
+  width: 100%;
+  height: auto; }
+page-place-detail ion-fab {
+  top: 30%; }
 
 /*# sourceMappingURL=place-detail.css.map */

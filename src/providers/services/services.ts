@@ -75,8 +75,8 @@ export class Services {
           item = new LugaresBo(data);
           item.imagenes = this.util.getListIds(data.imagenes);
           const lugar: ILugar = {
-            id: 0,
-            id_odoo: item.id,
+            id: item.id,
+            id_odoo: item.id.toString(),
             name: item.name,
             descripcion: item.descripcion,
             score: item.score,
@@ -397,7 +397,12 @@ export class Services {
       let self = this;
       self.odoo = this.odoo;
       const fields = ["name", "descripcion", "imagenes", "audio_name"];
-      const defaultQuery = [['id', '>', lastId], ['city_id', '=', APP_CONFIG.CITY_ID]];
+      let defaultQuery = [['id', '>', lastId], ['city_id', '=', APP_CONFIG.CITY_ID]];
+
+      if (apartado === this.util.Apartados.esquema) {
+        defaultQuery = [['city_id', '=', APP_CONFIG.CITY_ID]];
+      }
+
       self.odoo.search_read(tableApi, defaultQuery, fields).then(async value => {
         console.log(value);
 
@@ -408,18 +413,21 @@ export class Services {
 
         for (var data of value) {
           item = new GeneralBo(data);
-          item.imagenes = this.util.getListIds(data.imagenes);
+
+          if(data.imagenes)
+            item.imagenes = this.util.getListIds(data.imagenes);
+
           const lugar: IGeneral = {
             id: 0,
             id_odoo: item.id,
-            name: item.name,
-            descripcion: item.descripcion,
-            imagenes: item.imagenes,
+            name: item.name || '',
+            descripcion: item.descripcion || '',
+            imagenes: item.imagenes || '',
             apartado: apartado
           };
 
 
-          await GeneralBo.exist(item.id_odoo, apartado).then(exist => {
+          await GeneralBo.exist(item.id_odoo || item.id, apartado).then(exist => {
             if (exist) {
               updateArray.push(lugar);
             }
@@ -429,39 +437,14 @@ export class Services {
           }).catch(() => {
           });
 
-          /*
-            await this.addIdsImages(item.imagenes).then(() => {
-             }).catch(() => {
-             });
-          */
         }
 
-        /*
-        let images: Array<any> = new Array();
-        newArray.map((value) => {
-          if (value.imagenes) {
-            value.imagenes.split(',').map(img => {
-              if (img)
-                images.push(img);
-              // images.push(['id', '=', img]);
+        await GeneralBo.saveAllJson(newArray, updateArray).then(async success => {
+          if (apartado === this.util.Apartados.esquema) {
+            await this.addImages(item.imagenes.split(',')).then(() => {
+            }).catch(() => {
             });
           }
-        });
-        updateArray.map((value) => {
-          if (value.imagenes) {
-            value.imagenes.split(',').map(img => {
-              if (img)
-                images.push(img);
-              // images.push(['id', '=', img]);
-            });
-          }
-        });
-        await this.addImages(images).then(() => {
-        }).catch(() => {
-        });
-        */
-
-        await GeneralBo.saveAllJson(newArray, updateArray).then(success => {
           resolve(true);
         }).catch(ex => {
           reject({status: 500, message: ex || 'Error Sync GeneralBo ' + apartado});
@@ -475,43 +458,6 @@ export class Services {
     });
   }
 
-  /*
-  async addIdsImages(ids: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      if (ids) {
-        let arrayIds: Array<string> = ids.split(",");
-        if (arrayIds.length > 0) {
-          for (let img of arrayIds) {
-            if (!img) {
-              continue;
-            }
-            new ImagenesBo().exist(img).then(async exist => {
-              if (!exist.id_odoo) {
-                await new ImagenesBo().insert(img).then().catch();
-              }
-              if (!exist.image) {
-                await this.getImage(img).then(async image => {
-                  await new ImagenesBo().update(image).then(() => {
-                    resolve();
-                  }).catch(ex => {
-                    reject();
-                  });
-                }).catch(ex => {
-                  reject();
-                });
-              }
-            }).catch(ex => {
-              reject();
-            });
-          }
-        }
-        resolve();
-      } else {
-        reject();
-      }
-    });
-  }
-  */
 
   getImage(id: string): Promise<ImagenesBo> {
     return new Promise((resolve, reject) => {
@@ -546,107 +492,8 @@ export class Services {
   }
 
 
-  /*
-    async addImages(where: Array<any>) {
-      return new Promise(async (resolve, reject) => {
-        console.log('where');
-        console.log(where);
-        if (where.length === 0) {
-          reject({status: 500, message: 'Error consultando array imagen '});
-        }
-        for (var conditional of where) {
-          let self = this;
-          self.odoo = this.odoo;
-          const fields = ["image"];
-          const defaultQuery = [conditional];
-          console.log('defaultQuery');
-          console.log(defaultQuery);
-          await self.odoo.search_read('audioguia.imagenes', defaultQuery, fields).then(async value => {
-            let data = value[0];
-
-            const img = self.domSanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + data.image);
-            console.log(img);
-            let imagen: ImagenesBo = new ImagenesBo({
-              id: data.id,
-              id_odoo: data.id,
-              image: img['changingThisBreaksApplicationSecurity']
-            });
-
-            let im = new ImagenesBo();
-            await im.exist(data.id).then(async exist => {
-              if (!exist.id_odoo) {
-                await new ImagenesBo().insert(data.id, imagen.image).then().catch();
-              }
-              else {
-                await new ImagenesBo().update(imagen).then().catch();
-              }
-            }).catch(ex => {
-            });
-
-          }).catch(ex => {
-              reject({status: 500, message: ex || 'Error consultando array imagen '});
-            }
-          );
-        }
-
-        resolve(true);
-      });
-
-    }
-  */
-
-  /*
-    addImages(where: Array<any>): Promise<boolean> {
-      return new Promise((resolve, reject) => {
-        console.log('where');
-        console.log(where);
-        if (where.length === 0) {
-          reject({status: 500, message: 'Error consultando array imagen '});
-        }
-
-        let self = this;
-        self.odoo = this.odoo;
-        const fields = ["image"];
-        const defaultQuery = [where];
-        console.log('defaultQuery');
-        console.log(defaultQuery);
-        self.odoo.search_read('audioguia.imagenes', defaultQuery, fields).then(value => {
-
-          for (var data of value) {
-            const img = self.domSanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + data.image);
-            console.log(img);
-            let imagen: ImagenesBo = new ImagenesBo({
-              id: data.id,
-              id_odoo: data.id,
-              image: img['changingThisBreaksApplicationSecurity']
-            });
-
-            let im = new ImagenesBo();
-            im.exist(data.id).then(async exist => {
-              if (!exist.id_odoo) {
-                await new ImagenesBo().insert(data.id, imagen.image).then().catch();
-              }
-              else {
-                await new ImagenesBo().update(imagen).then().catch();
-              }
-            }).catch(ex => {
-            });
-          }
-
-          resolve(true);
-
-        }).catch(ex => {
-            reject({status: 500, message: ex || 'Error consultando array imagen '});
-          }
-        );
-
-      });
-
-    }
-    */
-
   addImages(where: Array<any>): Promise<boolean> {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       console.log('where');
       console.log(where);
       if (where.length === 0) {
@@ -656,12 +503,25 @@ export class Services {
       let self = this;
       self.odoo = this.odoo;
       const fields = ["image"];
-      const defaultQuery = where;
+      const defaultQuery = [];
+
+      console.log('where');
+      console.log(where);
+
+      for (let id of where) {
+        await (new ImagenesBo()).exist(id).then().catch(ex => {
+          defaultQuery.push(id);
+        });
+      }
+
       console.log('defaultQuery');
       console.log(defaultQuery);
-      console.log('ide');
-      console.log(where);
-      self.odoo.search_read('audioguia.imagenes', [['id', 'in', where]], fields).then(async value => {
+
+      if (defaultQuery.length <= 0) {
+        resolve(true);
+      }
+
+      self.odoo.search_read('audioguia.imagenes', [['id', 'in', defaultQuery]], fields).then(async value => {
 
         for (var data of value) {
           const img = self.domSanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + data.image);
@@ -673,12 +533,12 @@ export class Services {
           });
 
           imagen.exist(data.id).then(async exist => {
-            if (!exist.id_odoo)
-              await new ImagenesBo().insert(imagen).then().catch();
-          }).catch(ex => {
+            await new ImagenesBo().update(imagen).then().catch();
+          }).catch(async ex => {
+            await new ImagenesBo().insert(imagen).then(async () => {
+              await new ImagenesBo().update(imagen).then().catch();
+            }).catch();
           });
-
-          await new ImagenesBo().update(imagen).then().catch();
         }
 
         resolve(true);
@@ -692,13 +552,13 @@ export class Services {
 
   }
 
+
   public getLastIdByTableName(tableName: string, where: string): Promise<string> {
     return new Promise((resolve, reject) => {
-      let query: string = "SELECT MAX(id_odoo) as id_odoo FROM " + tableName;
+      let query: string = "SELECT MAX(id_odoo) AS id_odoo FROM " + tableName;
       if (where) {
         query += " WHERE apartado = '" + where + "' ";
       }
-      query += " ORDER BY id_odoo DESC LIMIT 1";
 
       AudioguiaSQLiteHelper.db.executeSql(query, []).then(data => {
         let count: string = '0';

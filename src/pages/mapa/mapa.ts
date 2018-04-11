@@ -1,7 +1,8 @@
 import {Component} from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {MusicControls} from '@ionic-native/music-controls';
-import { Media, MediaObject } from '@ionic-native/media';
+import {Media, MediaObject} from '@ionic-native/media';
+import {LugaresBo} from "../../models/LugaresBo";
 
 @IonicPage()
 @Component({
@@ -10,18 +11,40 @@ import { Media, MediaObject } from '@ionic-native/media';
 })
 export class MapaPage {
 
-  public lat: number = 55.4507;
-  public lng: number = 37.3656;
+  lugaresItems: Array<LugaresBo> = new Array();
+  public lat: number = 55.75952;
+  public lng: number = 37.61228;
+/*  public lat: number = 55.4507;
+  public lng: number = 37.3656;*/
   public file: MediaObject;
+
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public media: Media,
               public musicControls: MusicControls) {
 
     // this.play();
+    this.cargarLugares();
+
   }
 
-  play(){
+
+  async cargarLugares() {
+    await new LugaresBo().getMapa().then(async data => {
+      this.lugaresItems = data;
+      console.log(data);
+    }).catch(e => {
+      console.log('cargarLugares error ');
+      console.log(e);
+    });
+  }
+
+
+  private convertStringToNumber(value: string): number {
+    return +value;
+  }
+
+  play() {
 
     this.file = this.media.create('https://www.youtube.com/watch?v=sZj3eyWgcK8');
     this.file.play();
@@ -118,7 +141,7 @@ export class MapaPage {
     this.musicControls.updateIsPlaying(true);
   }
 
-  pause(){
+  pause() {
     this.file.pause();
   }
 

@@ -14,7 +14,8 @@ import {DomSanitizer} from "@angular/platform-browser";
 })
 export class EsquemaMetroPage {
 
-  items: Array<GeneralBo> = new Array();
+  item: GeneralBo = new GeneralBo();
+  img: string = null;
   page: number = 1;
   title: string = "";
 
@@ -33,32 +34,9 @@ export class EsquemaMetroPage {
 
   async cargarDatos() {
     await new GeneralBo().get(this.page, this.util.Apartados.esquema).then(async data => {
-        let array: Array<GeneralBo> = new Array();
-        if ((data instanceof Array) === false) {
-          try {
-            array.push(data[0]);
-          } catch (e) {
-          }
-        } else {
-          array = data;
-        }
-        for (let lugar of array) {
-          let obj: GeneralBo = lugar;
-          if (obj.imagenes !== "0") {
-            let img_lugar: Array<ImagenesBo> = new Array();
-            for (let id_image of obj.imagenes.split(',')) {
-              if (id_image) {
-                await new ImagenesBo().getImageById(id_image).then(images => {
-                  img_lugar.push(images);
-                }).catch(e => {
-                  console.log('cargarDatos imagenes error ');
-                  console.log(e);
-                });
-                obj.images_bo = img_lugar;
-              }
-            }
-          }
-          this.items.push(obj);
+        try {
+          this.item = data[0];
+        } catch (e) {
         }
       }
     ).catch(e => {

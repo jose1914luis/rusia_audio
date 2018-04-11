@@ -1,7 +1,7 @@
 {
 "version": 3,
-"mappings": "",
-"sources": [],
+"mappings": "AACE,6BAAY;EACV,GAAG,EAAE,cAAc;AAGrB,4BAAW;EACT,MAAM,EAAE,GAAG;AAGb,mCAAkB;EAChB,KAAK,EAAE,IAAI;EACX,MAAM,EAAE,IAAI;AAGd,yBAAQ;EACN,GAAG,EAAE,GAAG",
+"sources": ["place-detail.scss"],
 "names": [],
 "file": "place-detail.css"
 }

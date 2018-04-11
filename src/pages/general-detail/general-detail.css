@@ -1,3 +1,9 @@
-
+page-general-detail ion-content {
+  top: 0px !important; }
+page-general-detail ion-slides {
+  height: 40%; }
+page-general-detail .swiper-slide img {
+  width: 100%;
+  height: auto; }
 
 /*# sourceMappingURL=general-detail.css.map */

@@ -11,6 +11,6 @@
     </ion-buttons>
   </ion-navbar>
   <ion-toolbar *ngIf="toggleSearch === true">
-    <ion-searchbar (input)="getItems($event)"></ion-searchbar>
+    <ion-searchbar (input)="getItems($event)" #filter (keyup)="onEvent('onFilter', filter.value, $event)"></ion-searchbar>
   </ion-toolbar>
 </ion-header>

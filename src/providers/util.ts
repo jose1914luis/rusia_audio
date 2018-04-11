@@ -4,6 +4,9 @@ import {Page} from "../models/pages";
 import {LugaresBo} from "../models/LugaresBo";
 import {APP_CONFIG} from "../../constants";
 import {InAppBrowser} from '@ionic-native/in-app-browser';
+import {LocalNotifications} from '@ionic-native/local-notifications';
+
+declare var cordova: any;
 
 @Injectable()
 export class UtilTool {
@@ -45,10 +48,10 @@ export class UtilTool {
       params: {title: 'Donde dormir', tipo: 'dormir'}
     },
     {
-      title: 'Otros places',
+      title: 'Otros lugares',
       component: 'PlacesPage',
       icon: 'icon_place.png',
-      params: {title: 'Otros places', tipo: 'otros'}
+      params: {title: 'Otros lugares', tipo: 'otros'}
     },
     {
       title: 'Mis favoritos',
@@ -70,7 +73,7 @@ export class UtilTool {
     },
     {
       title: 'Historia del metro',
-      component: 'GeneralPage',
+      component: 'HistorialMetroPage',
       icon: 'ic_historia.png',
       params: {title: 'Historia del metro', tipo: 'historia'}
     },
@@ -105,6 +108,7 @@ export class UtilTool {
               public alertCtrl: AlertController,
               public platform: Platform,
               public toastCtrl: ToastController,
+              public localNotifications: LocalNotifications,
               public actionSheetCtrl: ActionSheetController,
               public iab: InAppBrowser) {
 
@@ -179,6 +183,51 @@ export class UtilTool {
       return true;
     else
       false;
+  }
+
+
+  public pushNotification(tag: number = 1, key: string = "", text: string = "", icon: string = "assets/icon/favicon.ico") {
+    debugger;
+    this.localNotifications.schedule({
+      id: tag,
+      text: text,
+      icon: icon,
+      data: {secret: key}
+    });
+
+  }
+
+  public pushNotificationProgressBar(tag: number = 1, text: string = "", progressBar: number = 0) {
+    try {
+      cordova.plugins.notification.local.schedule({
+        id: tag,
+        title: APP_CONFIG.APP_NAME,
+        text: text,
+        progressBar: {value: progressBar},
+        icon: "assets/icon/favicon.ico",
+        foreground: true
+      });
+    } catch (e) {
+    }
+  }
+
+  public setProgressBarPushNotification(tag: number = 1, progressBar: number = 0) {
+    try {
+      this.localNotifications.get(tag).then(noty => {
+        try {
+          noty['progressBar'] = {value: progressBar};
+          console.log(noty);
+        } catch (e) {
+        }
+      }).catch();
+    } catch (e) {
+    }
+    try {
+      if (progressBar === 100) {
+        this.localNotifications.clear(tag);
+      }
+    } catch (e) {
+    }
   }
 
 

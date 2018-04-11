@@ -12,7 +12,7 @@ export class LugaresBo {
     this._id = obj.id;
     this._id_odoo = obj.id_odoo;
     this._name = obj.name;
-    this._descripcion = obj.description;
+    this._descripcion = obj.descripcion;
     this._audio_name = obj.audio_name;
     this._score = obj.score;
     this._direccion = obj.direccion;
@@ -21,9 +21,9 @@ export class LugaresBo {
     this._latitud = obj.latitud;
     this._longitud = obj.longitud;
     this._tipo = obj.tipo;
-    this._comer = obj.comer;
-    this._dormir = obj.dormir;
-    this._interes = obj.interes;
+    this._comer = obj.comer.toString();
+    this._dormir = obj.dormir.toString();
+    this._interes = obj.interes.toString();
     this._numbereres = obj.numbereres;
     this._es_gratis = obj.es_gratis;
     this._imagenes = obj.imagenes;
@@ -49,13 +49,13 @@ export class LugaresBo {
   }
 
 
-  private _id_odoo: number;
+  private _id_odoo: string;
 
-  get id_odoo(): number {
+  get id_odoo(): string {
     return this._id_odoo;
   }
 
-  set id_odoo(value: number) {
+  set id_odoo(value: string) {
     this._id_odoo = value;
   }
 
@@ -351,14 +351,80 @@ export class LugaresBo {
     });
   }
 
-  public get(page: number, where: string = ""): Promise<Array<LugaresBo>> {
-    return new Promise((resolve, reject) => {
-      console.log(where);
+  public static saveAll(newData: Array<ILugar>, updateData: Array<ILugar>) {
+    console.log(newData);
+    console.log(updateData);
+    return new Promise(async (resolve, reject) => {
       const lugaresEntry: LugaresEntry = new LugaresEntry();
-      // const query = "SELECT * FROM " + lugaresEntry.TABLE_NAME + " ORDER BY " + lugaresEntry.NAME + " LIMIT ? OFFSET ? ";
+
+      for (let lugar of newData) {
+        await AudioguiaSQLiteHelper.db.executeSql(lugaresEntry.INSERT, [
+          lugar.id_odoo, lugar.name, lugar.descripcion, lugar.score, lugar.direccion,
+          lugar.horario, lugar.precio_entrada, lugar.latitud, lugar.longitud, lugar.tipo,
+          lugar.comer, lugar.dormir, lugar.interes, lugar.es_gratis, lugar.imagenes,
+          lugar.rutas, lugar.audio_name, lugar.url, lugar.icon_marker, lugar.lugares
+        ])
+          .then((data) => {
+            console.log('Executed SQL LugaresBo saveAll');
+            console.log(data);
+          })
+          .catch(ex => {
+            console.log(ex);
+            // reject({status: 500, message: ex || 'Error LugaresBo saveAll '});
+          });
+      }
+
+      resolve(true);
+    });
+  }
+
+  public get(page: number, tipo: string = ""): Promise<Array<LugaresBo>> {
+    return new Promise((resolve, reject) => {
+      console.log(tipo);
+      const lugaresEntry: LugaresEntry = new LugaresEntry();
+
       const query = "SELECT * FROM " + lugaresEntry.TABLE_NAME + " ORDER BY " + lugaresEntry.NAME;
 
-      // AudioguiaSQLiteHelper.db.executeSql(query, [APP_CONFIG.LIMIT_SQL, ( APP_CONFIG.LIMIT_SQL * page)])
+      AudioguiaSQLiteHelper.db.executeSql(query, [])
+        .then((data) => {
+          console.log('Executed SQL LugaresBo get ' + data.rows);
+          let array: Array<LugaresBo> = new Array();
+          if (data.rows.length > 0) {
+            for (let i = 0; i < data.rows.length; i++) {
+              console.log(data.rows.item(i));
+              array.push(new LugaresBo(data.rows.item(i)));
+            }
+          }
+
+          if (tipo === 'comer')
+            array = array.filter(f => f.comer === 'true');
+          else if (tipo === 'dormir')
+            array = array.filter(f => f.dormir === 'true');
+          else if (tipo === 'interes')
+            array = array.filter(f => f.interes === 'true');
+          else if (tipo === 'otros')
+            array = array.filter(f => f.comer === 'false' && f.dormir === 'false' && f.interes === 'false');
+          else
+            array = new Array();
+
+          console.log('fin Executed SQL LugaresBo get');
+          console.log(array);
+          resolve(array);
+        })
+        .catch(ex => {
+          console.log(ex);
+          reject({status: 500, message: ex || 'Error LugaresBo get '});
+        });
+    });
+  }
+
+  public getMapa(): Promise<Array<LugaresBo>> {
+    return new Promise((resolve, reject) => {
+      const lugaresEntry: LugaresEntry = new LugaresEntry();
+      const query = "SELECT * FROM " + lugaresEntry.TABLE_NAME + " WHERE " + lugaresEntry.LATITUD + " IS NOT NULL  " +
+        " AND " + lugaresEntry.lONGITUD + " IS NOT NULL "
+      " ORDER BY " + lugaresEntry.LATITUD + " ,  " + lugaresEntry.lONGITUD;
+
       AudioguiaSQLiteHelper.db.executeSql(query, [])
         .then((data) => {
           console.log('Executed SQL LugaresBo get');
@@ -370,21 +436,9 @@ export class LugaresBo {
               array.push(new LugaresBo(data.rows.item(i)));
             }
           }
-
-          if (where === 'comer')
-            array = array.filter(f => f.comer === 'true');
-          else if (where === 'dormir')
-            array = array.filter(f => f.dormir === 'true');
-          else if (where === 'interes')
-            array = array.filter(f => f.interes === 'true');
-          else if (where === 'otros')
-            array = array.filter(f => f.comer === 'false' && f.dormir === 'false' && f.interes === 'false');
-          else
-            array = new Array();
-
           console.log('fin Executed SQL LugaresBo get');
           console.log(array);
-          resolve(array.slice(( APP_CONFIG.LIMIT_SQL * page) - APP_CONFIG.LIMIT_SQL, ( APP_CONFIG.LIMIT_SQL * page)));
+          resolve(array);
         })
         .catch(ex => {
           console.log(ex);
@@ -419,7 +473,7 @@ export class LugaresBo {
     });
   }
 
-  public static exist(id: number): Promise<boolean> {
+  public static exist(id: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
       AudioguiaSQLiteHelper.db.executeSql(new LugaresEntry().SELECT_ONE, [id])
         .then((data) => {

@@ -63,10 +63,26 @@ export class GeneralPage {
   }
 
 
+  async loadImgLocal(obj: GeneralBo) {
+    if (obj.imagenes) {
+      let img_lugar: Array<ImagenesBo> = new Array();
+      for (let id_image of obj.imagenes.split(',')) {
+        if (id_image) {
+          await new ImagenesBo().getImageById(id_image).then(images => {
+            img_lugar.push(images);
+          }).catch(e => {
+            console.log('cargarLugares imagenes error ');
+            console.log(e);
+          });
+          obj.images_bo = img_lugar;
+        }
+      }
+    }
+  }
+
+
   async cargarDatos() {
     await new GeneralBo().get(this.page, this.tipo).then(async data => {
-
-      this.util.LoadingShow();
 
         let array: Array<GeneralBo> = new Array();
         if ((data instanceof Array) === false) {
@@ -78,43 +94,39 @@ export class GeneralPage {
           array = data;
         }
 
-        let images: Array<any> = new Array();
-        array.map((value) => {
-          if (value.imagenes) {
-            value.imagenes.split(',').map(img => {
-              if (img)
-                images.push(img);
-            });
-          }
-        });
-
-        if (images.length > 0) {
-          await this.services.login().then(async () => {
-            await this.services.addImages(images).then().catch();
-          }).catch();
-        }
-
         for (let lugar of array) {
           let obj: GeneralBo = lugar;
-          if (obj.imagenes !== "0") {
-            let img_lugar: Array<ImagenesBo> = new Array();
-            for (let id_image of obj.imagenes.split(',')) {
-              if (id_image) {
-                await new ImagenesBo().getImageById(id_image).then(images => {
-                  img_lugar.push(images);
-                }).catch(e => {
-                  console.log('cargarDatos imagenes error ');
-                  console.log(e);
-                });
-                obj.images_bo = img_lugar;
-              }
-            }
-          }
           this.items.push(obj);
         }
 
-      this.util.LoadingHide();
+        if (this.util.Apartados.historia === this.tipo) {
+          if (this.items.length > 0) {
+            this.openItem(this.items[0]);
+          }
+        }
 
+        if (this.items.length > 0) {
+          this.util.pushNotificationProgressBar(100, "Descargando Imagenes", 0);
+          for (let general of this.items) {
+            let obj: GeneralBo = general;
+            if (obj.imagenes) {
+              let images: Array<any> = new Array();
+              obj.imagenes.split(',').map(img => {
+                if (img) {
+                  images.push(img);
+                }
+              });
+              if (images.length > 0) {
+                await this.services.addImages(images).then(async () => {
+                  this.loadImgLocal(obj).then().catch();
+                }).catch(() => {
+                  this.loadImgLocal(obj).then().catch();
+                });
+              }
+            }
+          }
+          this.util.setProgressBarPushNotification(100, 100);
+        }
       }
     ).catch(e => {
       debugger;

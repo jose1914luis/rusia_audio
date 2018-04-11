@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AACE,gCAAY;EACV,GAAG,EAAE,cAAc;AAGrB,+BAAW;EACT,MAAM,EAAE,GAAG;AAGb,sCAAkB;EAChB,KAAK,EAAE,IAAI;EACX,MAAM,EAAE,IAAI",
+"sources": ["historial-metro.scss"],
+"names": [],
+"file": "historial-metro.css"
+}

@@ -24,6 +24,7 @@
     <allow-intent href="geo:*" />
     <preference name="ScrollEnabled" value="false" />
     <preference name="android-minSdkVersion" value="16" />
+    <preference name="android-targetSdkVersion" value="26" />
     <preference name="BackupWebStorage" value="none" />
     <preference name="SplashMaintainAspectRatio" value="true" />
     <preference name="FadeSplashScreenDuration" value="300" />
@@ -31,6 +32,8 @@
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="3000" />
     <platform name="android">
+        <preference name="android-minSdkVersion" value="16" />
+        <preference name="android-targetSdkVersion" value="26" />
         <allow-intent href="market:*" />
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
         <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
@@ -93,13 +96,22 @@
     <allow-navigation href="http://192.168.0.10:8100" />
     <allow-navigation href="file://*/*" />
     <allow-navigation href="http://192.168.33.24:8100" />
-    <engine name="android" spec="^6.2.3" />
+    <allow-navigation href="http://192.168.0.12:8100" />
+    <allow-navigation href="http://192.168.33.35:8100" />
+    <allow-navigation href="http://192.168.0.15:8100" />
+    <engine name="android" spec="^6.3.0" />
+    <plugin name="cordova-android-play-services-gradle-release" spec="^1.2.1">
+        <variable name="PLAY_SERVICES_VERSION" value="12.+" />
+    </plugin>
+    <plugin name="cordova-plugin-app-event" spec="^1.2.1" />
+    <plugin name="cordova-plugin-compat" spec="^1.2.0" />
     <plugin name="cordova-plugin-device" spec="^1.1.4" />
     <plugin name="cordova-plugin-geolocation" spec="^2.4.3">
         <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="To locate you" />
     </plugin>
     <plugin name="cordova-plugin-inappbrowser" spec="^1.7.1" />
     <plugin name="cordova-plugin-ionic-webview" spec="^1.1.11" />
+    <plugin name="cordova-plugin-local-notification" spec="git+https://github.com/katzer/cordova-plugin-local-notifications.git" />
     <plugin name="cordova-plugin-media" spec="^3.0.1" />
     <plugin name="cordova-plugin-music-controls" spec="^2.1.4" />
     <plugin name="cordova-plugin-splashscreen" spec="^4.0.3" />

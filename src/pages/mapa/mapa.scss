@@ -1,6 +1,14 @@
 page-mapa {
+  ion-content {
+    top: 0px !important;
+  }
+
   agm-map {
     width: 100%;
     height: 100%;
+  }
+
+  ion-buttons {
+    position: absolute;
   }
 }

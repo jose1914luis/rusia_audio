@@ -151,7 +151,7 @@ export class GeneralBo {
         const generalEntry: GeneralEntry = new GeneralEntry();
 
         for (let data of newData) {
-          await AudioguiaSQLiteHelper.db.executeSql(new GeneralEntry().INSERT, [data.id_odoo, data.id_odoo, data.name, data.descripcion, data.apartado, data.imagenes])
+          await AudioguiaSQLiteHelper.db.executeSql(new GeneralEntry().INSERT, [data.id_odoo, data.name, data.descripcion, data.apartado, data.imagenes])
             .then((data) => {
             })
             .catch(ex => {
@@ -192,13 +192,11 @@ export class GeneralBo {
     );
   }
 
-  public
-
-  get(page: number, aparto: string = ""): Promise<Array<GeneralBo>> {
+  public get(page: number, aparto: string = ""): Promise<Array<GeneralBo>> {
     return new Promise((resolve, reject) => {
       const generalEntry: GeneralEntry = new GeneralEntry();
-      const query = "SELECT * FROM " + generalEntry.TABLE_NAME; //+ " ORDER BY " + generalEntry.NAME + " LIMIT ? OFFSET ? ";
-      AudioguiaSQLiteHelper.db.executeSql(query, [])
+      // const query = "SELECT * FROM " + generalEntry.TABLE_NAME; //+ " ORDER BY " + generalEntry.NAME + " LIMIT ? OFFSET ? ";
+      AudioguiaSQLiteHelper.db.executeSql(generalEntry.SELECT_ALL, [])
       // AudioguiaSQLiteHelper.db.executeSql(query, [APP_CONFIG.LIMIT_SQL, ( APP_CONFIG.LIMIT_SQL * page)])
         .then((data) => {
           console.log('Executed SQL GeneralBo get');
@@ -222,9 +220,7 @@ export class GeneralBo {
     });
   }
 
-  public static
-
-  exist(id: number, apartao: string): Promise<boolean> {
+  public static exist(id: number, apartao: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
       AudioguiaSQLiteHelper.db.executeSql(new GeneralEntry().SELECT_ONE, [id, apartao])
         .then((data) => {
